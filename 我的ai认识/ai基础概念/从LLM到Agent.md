@@ -3,7 +3,7 @@
 要理解它们的关系，可以用一个**智能员工**的比喻来串联：
 
 - **🧠 LLM（大语言模型）—— “大脑”**  
-    它是整个系统的**智能核心**，负责理解、推理、思考和生成内容[](https://zhuanlan.zhihu.com/p/2040077288360907657)。但它本身“光说不练”，无法直接与外部世界互动或获取实时信息[](https://auth0.com/blog/what-ai-tools-mcp-servers-and-skills-actually-do/)。
+    它是整个系统的**智能核心**，负责理解、推理、思考和生成内容[](https://zhuanlan.zhihu.com/p/2040077288360907657)。但它本身“光说不练”，无法直接与外部世界互动或获取实时信息[](https://auth0.com/blog/what-ai-tools-mcp-servers-and-skills-actually-do/)。***（其无法直接改变外界环境！）***
     
 - **🦾 Agent（智能体）—— “员工”**  
     Agent是一个以LLM为核心的**自主系统**[](https://developer.aliyun.com/article/1746476)。它不仅拥有“大脑”，还配备了“计划、记忆和使用工具的四肢”[](https://zhuanlan.zhihu.com/p/2040077288360907657)，能将一个复杂目标拆解成步骤，并自主决定使用哪些工具来完成任务[](https://cloud.tencent.com.cn/developer/article/2627985)。可以说 **Agent = LLM + 规划 + 记忆 + 工具调用能力**[](https://grapecity.csdn.net/6a0fbca310ee7a33f2744dd9.html)。
