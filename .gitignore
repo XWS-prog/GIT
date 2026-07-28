@@ -1,0 +1,62 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors and IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs and temporary files
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.cache
+
+# Node.js
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+coverage/
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Java and JVM
+.gradle/
+target/
+*.class
+
+# Local tooling
+.cache/
+
+# Obsidian local state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache/
+.trash/
+
+# Local AI assistant sessions and credentials
+.claudian/
+.obsidian/plugins/realclaudian/data.json
