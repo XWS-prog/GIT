@@ -36,3 +36,6 @@ Harness Engineering 解决的是 **“执行过程问题”**——如何让模
 |**可观测性**|几乎为零。|可追踪信息注入来源，但无执行过程审计。|**全链路可观测**：追踪 Agent 每一步决策、工具调用、成本、错误归因[](https://cloud.tencent.com.cn/developer/article/2684701)[](https://zhuanlan.zhihu.com/p/2041595801856725998)[](https://www.163.com/dy/article/KOKBCPAS05568W0A.html?spss=adap_pc)。|系统从“黑盒”走向“白盒”。|
 
 **一句话总结**：模型决定了智能的**上限**，而 Harness 决定了 AI 能否在真实世界中**可靠地触及**这个上限[](https://cloud.tencent.com.cn/developer/article/2700315?policyId=1003)。
+
+
+附：视频讲解【# 最近爆火的 Harness Engineering 到底是啥？一期讲透！】https://www.bilibili.com/video/BV1Zk9FBwELs/?spm_id_from=333.337.search-card.all.click&vd_source=944d279541b8d6f5497a19b5f9fc6bff
