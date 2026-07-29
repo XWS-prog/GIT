@@ -10,7 +10,7 @@ Codex 是 OpenAI 推出的 AI 编程智能体，定位为“智能体的指挥�
     
 - **自动化功能**：可按定时任务在后台运行重复性工作，如每日问题分流、CI 失败总结、发布简报生成等[](https://openai.com/zh-Hans-CN/index/introducing-the-codex-app/?video=1161130375&source=post_page-----ed1328e6ec11---------------------------------------)
     
-- **多端覆盖**：支持桌面应用（macOS/Windows）、CLI 命令行、IDE 插件和云端环境，通过 ChatGPT 账号统一登录[](https://openai.com/zh-Hans-CN/index/introducing-the-codex-app/?video=1161130375&source=post_page-----ed1328e6ec11---------------------------------------)[](https://openai.com/zh-Hans-CN/index/codex-now-generally-available/?utm_source=www.theaienterprise.io&utm_medium=newseltter&utm_campaign=openai-devday-2025-announces-huge-ai-updates&_bhlid=39da1da03fc86b50fe284a689c827d4f1b0581de)
+- **多端覆盖**：支持**桌面应用（macOS/Windows）**、CLI 命令行、IDE 插件和云端环境，通过 ChatGPT 账号统一登录[](https://openai.com/zh-Hans-CN/index/introducing-the-codex-app/?video=1161130375&source=post_page-----ed1328e6ec11---------------------------------------)[](https://openai.com/zh-Hans-CN/index/codex-now-generally-available/?utm_source=www.theaienterprise.io&utm_medium=newseltter&utm_campaign=openai-devday-2025-announces-huge-ai-updates&_bhlid=39da1da03fc86b50fe284a689c827d4f1b0581de)
     
 - **Slack 集成与 SDK**：支持在 Slack 中 @Codex 委派任务；提供 SDK 将智能体嵌入自有工作流[](https://openai.com/zh-Hans-CN/index/codex-now-generally-available/?utm_source=www.theaienterprise.io&utm_medium=newseltter&utm_campaign=openai-devday-2025-announces-huge-ai-updates&_bhlid=39da1da03fc86b50fe284a689c827d4f1b0581de)
     
