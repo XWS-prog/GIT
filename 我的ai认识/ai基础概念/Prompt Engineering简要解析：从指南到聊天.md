@@ -208,3 +208,5 @@
 ## 终极口诀（帮你记住所有坑）
 
 > **指南别模糊，迭代别贪多，摘要别丢核，推理别跳步，转换别走样，扩展别说空，聊天别失忆。**
+
+附：【吴恩达】有关Prompt Engineering课程 https://www.bilibili.com/video/BV1dR786ZEtG?spm_id_from=333.788.videopod.episodes&vd_source=944d279541b8d6f5497a19b5f9fc6bff&p=2
