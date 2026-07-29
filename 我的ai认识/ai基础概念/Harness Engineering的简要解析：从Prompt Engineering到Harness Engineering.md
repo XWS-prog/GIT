@@ -4,6 +4,8 @@
 
 可以用一个经典比喻来理解：**模型是“马”，提供智能与动力；Harness 是“马具”（缰绳、鞍具、控制系统），负责把握方向、控制速度、确保安全**[](https://cloud.tencent.com.cn/developer/article/2684701)[](https://36kr.com/p/3849719632673664)。一个完整的 AI Agent 系统 = **大模型 + Harness**[](https://zhuanlan.zhihu.com/p/2025667582208812643)[](https://cloud.tencent.com.cn/developer/article/2671147)。
 
+就如同**人利用经验来完成任务**一般，Agent正利用Harness这套模型来框定自己对工作的处理，使得其**对任务的处理有迹可循**，不会存在工作流程紊乱而产出半成品的情况，**保证了工作流的稳定性与持续性**
+
 Harness Engineering 解决的是 **“执行过程问题”**——如何让模型持续做对、在出错时自我修复，并确保其行为始终在预设边界内[](https://36kr.com/p/3849719632673664)[](https://cloud.tencent.com.cn/developer/article/2700315?policyId=1003)。其典型实践包括：为 Agent 设定项目规则文件（如 `AGENTS.md`）、接入验证闭环（如自动运行测试并将错误反馈给 Agent）、设置权限护栏与沙箱环境等[](https://zhuanlan.zhihu.com/p/2025667582208812643)[](https://36kr.com/p/3849719632673664)[](https://cloud.tencent.com.cn/developer/article/2671147)。
 
 ---
