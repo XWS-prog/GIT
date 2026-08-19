@@ -1,0 +1,12 @@
+allowBuilds:
+  '@next/swc-win32-x64-msvc': true
+  esbuild: true
+  next: true
+  sharp: true
+  unrs-resolver: true
+  workerd: true
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - unrs-resolver
+  - workerd
