@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语课堂笔记 · 四级词汇 13 词精讲</title>
+<style>
+  :root{
+    --paper:#F6F2EA;
+    --card:#FFFFFF;
+    --ink:#2C2A25;
+    --ink-soft:#5A544A;
+    --ink-mute:#8C8478;
+    --line:#E4DCCE;
+    --line-soft:#EFE8DB;
+    --accent:#1F4E5F;
+    --accent-soft:#E8F0F2;
+
+    --c-def:#7C3AED;  --bg-def:#F5F1FF;
+    --c-mem:#C2410C;  --bg-mem:#FDF3EC;
+    --c-eg:#047857;   --bg-eg:#ECF8F3;
+    --c-ext:#0E7490;  --bg-ext:#ECF6F9;
+    --c-fix:#DC2626;  --bg-fix:#FDEDED;
+
+    --fs-base:17.5px;
+    --sidebar:308px;
+    --serif:Georgia,"Times New Roman","Songti SC",serif;
+    --sans:"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:var(--fs-base);line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+  }
+  body.sb-hidden{--sidebar:0px;}
+
+  /* ============ 顶部进度条 ============ */
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0;
+    background:linear-gradient(90deg,#1F4E5F,#3E8E9B);
+    z-index:120;transition:width .12s linear;
+  }
+
+  /* ============ 侧栏 ============ */
+  #sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);
+    background:#FBF8F2;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;z-index:90;
+    transition:transform .28s ease, opacity .2s ease;
+  }
+  body.sb-hidden #sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;}
+
+  .sb-head{padding:26px 22px 16px;border-bottom:1px solid var(--line-soft);}
+  .sb-eyebrow{
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-mute);margin-bottom:6px;font-weight:600;
+  }
+  .sb-title{font-size:16.5px;font-weight:700;line-height:1.45;color:var(--ink);}
+  .sb-title em{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);}
+
+  .sb-search{padding:14px 18px 10px;}
+  .sb-search input{
+    width:100%;padding:9px 12px 9px 32px;border:1px solid var(--line);
+    border-radius:8px;background:var(--card);font-family:var(--sans);
+    font-size:13.5px;color:var(--ink);outline:none;transition:.18s;
+  }
+  .sb-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .sb-search{position:relative;}
+  .sb-search::before{
+    content:"⌕";position:absolute;left:29px;top:20px;
+    font-size:16px;color:var(--ink-mute);pointer-events:none;
+  }
+
+  /* 目录树 */
+  #toc{flex:1;overflow-y:auto;padding:6px 12px 24px;scrollbar-width:thin;}
+  #toc::-webkit-scrollbar{width:7px;}
+  #toc::-webkit-scrollbar-thumb{background:#DED5C5;border-radius:4px;}
+
+  .toc-chap{margin-bottom:2px;}
+  .toc-btn{
+    width:100%;display:flex;align-items:center;gap:8px;
+    background:none;border:0;cursor:pointer;text-align:left;
+    font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink-soft);
+    padding:8px 8px 8px 6px;border-radius:7px;line-height:1.5;transition:.15s;
+  }
+  .toc-btn:hover{background:#F2ECE1;color:var(--ink);}
+  .toc-btn .caret{
+    flex:0 0 auto;width:14px;font-size:10px;color:var(--ink-mute);
+    transition:transform .2s ease;display:inline-block;
+  }
+  .toc-chap.closed > .toc-btn .caret{transform:rotate(-90deg);}
+  .toc-chap.closed > .toc-body{display:none;}
+  .toc-body{padding-left:8px;border-left:1px solid var(--line-soft);margin-left:12px;}
+
+  .toc-sub{margin:1px 0;}
+  .toc-sub-btn{
+    width:100%;display:flex;align-items:center;gap:7px;background:none;border:0;
+    cursor:pointer;text-align:left;font-family:var(--sans);font-size:12.5px;
+    font-weight:600;color:var(--ink-mute);padding:6px 8px;border-radius:6px;
+    letter-spacing:.02em;transition:.15s;
+  }
+  .toc-sub-btn:hover{background:#F2ECE1;color:var(--ink-soft);}
+  .toc-sub-btn .caret{font-size:9px;transition:transform .2s ease;width:11px;flex:0 0 auto;}
+  .toc-sub.closed > .toc-sub-btn .caret{transform:rotate(-90deg);}
+  .toc-sub.closed > ul{display:none;}
+
+  #toc ul{list-style:none;margin:0;padding:0 0 4px 10px;}
+  #toc li a{
+    display:block;font-size:13px;color:var(--ink-soft);text-decoration:none;
+    padding:5px 8px 5px 10px;border-left:2px solid transparent;border-radius:0 5px 5px 0;
+    line-height:1.55;transition:.15s;
+  }
+  #toc li a:hover{background:#F2ECE1;color:var(--accent);}
+  #toc li a.active{
+    border-left-color:var(--accent);background:var(--accent-soft);
+    color:var(--accent);font-weight:600;
+  }
+  #toc .hidden{display:none;}
+
+  .sb-foot{
+    border-top:1px solid var(--line-soft);padding:12px 18px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:12px;color:var(--ink-mute);background:#FBF8F2;
+  }
+  .fs-group{display:flex;align-items:center;gap:4px;}
+  .fs-group button{
+    width:26px;height:26px;border:1px solid var(--line);background:var(--card);
+    border-radius:6px;cursor:pointer;color:var(--ink-soft);font-size:13px;
+    line-height:1;transition:.15s;
+  }
+  .fs-group button:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ============ 侧栏开关 ============ */
+  #sbToggle{
+    position:fixed;top:16px;left:calc(var(--sidebar) + 16px);z-index:100;
+    display:flex;align-items:center;gap:7px;
+    background:var(--card);border:1px solid var(--line);border-radius:9px;
+    padding:8px 13px;cursor:pointer;font-family:var(--sans);font-size:12.5px;
+    color:var(--ink-soft);box-shadow:0 2px 10px rgba(70,58,40,.07);
+    transition:left .28s ease,color .15s,border-color .15s;
+  }
+  #sbToggle:hover{color:var(--accent);border-color:#C9D6D9;}
+  #sbToggle .bars{display:inline-flex;flex-direction:column;gap:2.5px;}
+  #sbToggle .bars i{display:block;width:13px;height:1.6px;background:currentColor;border-radius:1px;}
+
+  /* ============ 正文 ============ */
+  #main{
+    margin-left:var(--sidebar);padding:70px 54px 120px;
+    transition:margin-left .28s ease;max-width:1180px;
+  }
+  .wrap{max-width:780px;margin:0 auto;}
+
+  /* 页头 */
+  .page-head{margin-bottom:44px;padding-bottom:30px;border-bottom:2px solid var(--ink);}
+  .page-kicker{
+    font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-mute);font-weight:600;margin-bottom:14px;
+  }
+  .page-head h1{
+    margin:0 0 12px;font-size:2.05rem;line-height:1.32;font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .page-head h1 em{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);}
+  .page-sub{color:var(--ink-soft);font-size:15px;margin:0 0 20px;line-height:1.8;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-size:12.5px;padding:4px 11px;border-radius:20px;
+    background:var(--card);border:1px solid var(--line);color:var(--ink-soft);
+  }
+  .chip b{color:var(--accent);font-weight:700;}
+
+  /* 章节 */
+  section{margin-bottom:56px;scroll-margin-top:28px;}
+  h2{
+    font-size:1.42rem;font-weight:700;margin:0 0 22px;padding-bottom:11px;
+    border-bottom:1px solid var(--line);line-height:1.45;position:relative;
+  }
+  h2::before{
+    content:"";position:absolute;left:0;bottom:-1px;width:52px;height:2px;
+    background:var(--accent);
+  }
+  h3{
+    font-size:1.06rem;font-weight:700;margin:34px 0 14px;color:var(--ink);
+    line-height:1.6;
+  }
+  h4{
+    font-size:1.02rem;font-weight:700;margin:26px 0 10px;color:var(--ink);
+    font-family:var(--serif);letter-spacing:.01em;
+  }
+  h4 .num{
+    font-family:var(--sans);font-size:.78rem;color:var(--accent);
+    background:var(--accent-soft);border-radius:5px;padding:2px 7px;
+    margin-right:9px;vertical-align:2px;font-weight:700;
+  }
+  p{margin:0 0 15px;}
+  strong{font-weight:700;color:#1E1C18;}
+  em{font-style:italic;}
+
+  /* 引言块 */
+  .lede{
+    background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:0 10px 10px 0;padding:18px 22px;margin:0 0 34px;
+    font-size:15.5px;color:var(--ink-soft);line-height:1.85;
+  }
+  .lede b{color:var(--ink);}
+
+  /* 批注体系 */
+  .anno{
+    margin:11px 0;padding:11px 16px 11px 15px;border-radius:0 8px 8px 0;
+    border-left:3px solid var(--c);background:var(--bg);
+    font-size:.94rem;line-height:1.82;color:#3B3730;
+  }
+  .anno .tag{
+    display:inline-block;font-weight:700;color:var(--c);
+    font-size:.82rem;letter-spacing:.04em;margin-right:6px;
+  }
+  .anno.def{--c:var(--c-def);--bg:var(--bg-def);}
+  .anno.mem{--c:var(--c-mem);--bg:var(--bg-mem);}
+  .anno.eg {--c:var(--c-eg); --bg:var(--bg-eg);}
+  .anno.ext{--c:var(--c-ext);--bg:var(--bg-ext);}
+  .anno.fix{--c:var(--c-fix);--bg:var(--bg-fix);}
+  .anno.eg em{font-family:var(--serif);font-size:1.01em;color:#1D3B33;}
+
+  /* 单词卡 */
+  .word{
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:18px 22px 20px;margin:16px 0;scroll-margin-top:24px;
+    box-shadow:0 1px 3px rgba(90,74,48,.045);
+    transition:box-shadow .2s,border-color .2s;
+  }
+  .word:hover{box-shadow:0 3px 14px rgba(90,74,48,.08);border-color:#D6CBB6;}
+  .word-hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:9px;margin-bottom:2px;}
+  .word-hd .idx{
+    font-family:var(--sans);font-size:.72rem;font-weight:700;color:#fff;
+    background:var(--accent);border-radius:5px;padding:1px 6px;
+    align-self:center;letter-spacing:.03em;
+  }
+  .word-hd .term{
+    font-family:var(--serif);font-size:1.28rem;font-weight:700;
+    color:var(--ink);letter-spacing:.005em;
+  }
+  .word-hd .pos{
+    font-family:var(--serif);font-style:italic;font-size:.92rem;
+    color:var(--ink-mute);
+  }
+  .word-hd .cn{font-size:.98rem;color:var(--ink-soft);}
+  .phon{
+    font-family:var(--serif);font-size:.9rem;color:var(--ink-mute);
+    margin:0 0 4px;letter-spacing:.02em;
+  }
+  .word .anno:last-child{margin-bottom:0;}
+
+  /* 表格 */
+  .tbl-wrap{overflow-x:auto;margin:20px 0 26px;border:1px solid var(--line);border-radius:10px;background:var(--card);}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;line-height:1.7;}
+  thead th{
+    background:#F4EFE4;text-align:left;padding:11px 15px;font-weight:700;
+    color:var(--ink);font-size:.85rem;letter-spacing:.03em;
+    border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:10px 15px;border-bottom:1px solid var(--line-soft);color:var(--ink-soft);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover{background:#FCFAF5;}
+  tbody td:first-child{color:var(--ink-mute);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .t-term{font-family:var(--serif);font-weight:600;color:var(--ink);}
+  .t-fix{color:var(--c-fix);font-weight:600;}
+
+  /* 结构流程 */
+  .flow{
+    display:flex;align-items:center;justify-content:center;gap:0;
+    flex-wrap:wrap;margin:26px 0;padding:24px 16px;
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+  }
+  .flow-node{
+    text-align:center;padding:13px 20px;border-radius:9px;
+    background:var(--accent-soft);border:1px solid #CFDFE3;min-width:132px;
+  }
+  .flow-node .en{
+    font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--accent);
+    display:block;line-height:1.4;
+  }
+  .flow-node .cn{font-size:11.5px;color:var(--ink-mute);display:block;margin-top:3px;}
+  .flow-arrow{color:#A8BFC4;font-size:15px;padding:0 14px;}
+
+  /* 引用/原则 */
+  blockquote{
+    margin:22px 0;padding:16px 22px;background:var(--card);
+    border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+    font-family:var(--serif);font-size:1.04rem;color:#2A3D42;line-height:1.85;
+  }
+  blockquote .trans{
+    display:block;font-family:var(--sans);font-size:.86rem;
+    color:var(--ink-mute);margin-top:7px;font-style:normal;
+  }
+
+  /* 小节引导语 */
+  .para-intro{
+    font-size:.88rem;color:var(--ink-mute);letter-spacing:.06em;
+    margin:30px 0 4px;padding-bottom:8px;border-bottom:1px dashed var(--line);
+    font-weight:600;text-transform:uppercase;
+  }
+
+  /* 复习建议 */
+  ol.steps{padding-left:0;list-style:none;counter-reset:s;margin:20px 0;}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:0 0 0 40px;margin-bottom:16px;
+    color:var(--ink-soft);font-size:.96rem;
+  }
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:3px;
+    width:24px;height:24px;border-radius:50%;background:var(--accent);
+    color:#fff;font-size:12px;font-weight:700;display:flex;
+    align-items:center;justify-content:center;font-family:var(--sans);
+  }
+  ol.steps li b{color:var(--ink);}
+
+  /* 相关笔记 */
+  .related{
+    margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:.88rem;color:var(--ink-mute);
+  }
+  .related a{color:var(--accent);text-decoration:none;border-bottom:1px solid #BFD2D7;}
+  .related a:hover{border-bottom-color:var(--accent);}
+
+  /* 移动端遮罩 */
+  #backdrop{display:none;}
+
+  /* 返回顶部 */  #toTop{
+    position:fixed;right:26px;bottom:26px;width:40px;height:40px;
+    border-radius:50%;border:1px solid var(--line);background:var(--card);
+    cursor:pointer;color:var(--ink-soft);font-size:15px;z-index:95;
+    box-shadow:0 2px 10px rgba(70,58,40,.09);
+    opacity:0;pointer-events:none;transition:.22s;
+  }
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{color:var(--accent);border-color:#C9D6D9;}
+
+  /* 响应式 */
+  @media (max-width:1080px){
+    #main{padding:70px 32px 100px;}
+  }
+  @media (max-width:860px){
+    #sidebar{
+      width:288px;transform:translateX(-100%);opacity:1;
+      box-shadow:0 0 40px rgba(60,50,35,.16);
+    }
+    body.sb-open #sidebar{transform:translateX(0);}
+    #backdrop{
+      display:block;position:fixed;inset:0;background:rgba(50,42,30,.3);
+      z-index:85;opacity:0;pointer-events:none;transition:opacity .25s ease;
+    }
+    body.sb-open #backdrop{opacity:1;pointer-events:auto;}
+    #main{margin-left:0;padding:64px 20px 90px;}
+    #sbToggle{left:14px;}
+    body.sb-open #sbToggle{left:300px;}
+    .page-head h1{font-size:1.6rem;}
+    .word{padding:15px 16px 17px;}
+    .flow{gap:6px;}
+    .flow-arrow{transform:rotate(90deg);padding:4px 0;}
+  }
+  @media print{
+    #sidebar,#sbToggle,#toTop,#progress{display:none!important;}
+    #main{margin:0;padding:0;max-width:none;}
+    body{background:#fff;font-size:11pt;}
+    .word,.anno,.lede{box-shadow:none;break-inside:avoid;}
+    section{break-inside:auto;}
+  }
+
+  .notice{
+    background:#FFF8E8;border:1px solid #EBD9A8;border-left:4px solid #C99A2E;
+    border-radius:0 10px 10px 0;padding:16px 20px;margin:0 0 30px;
+    font-size:.94rem;line-height:1.85;color:#5A4A22;
+  }
+  .notice b{color:#8A6516;}
+  .notice .tag{
+    display:inline-block;font-weight:700;color:#A8791B;font-size:.82rem;
+    letter-spacing:.06em;margin-right:6px;
+  }
+  .ladder{
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:20px 24px;margin:22px 0;font-family:var(--serif);
+    font-size:1rem;color:#2A3D42;line-height:2.2;
+  }
+  .ladder .lb{
+    display:inline-block;font-family:var(--sans);font-size:11px;font-weight:700;
+    color:var(--accent);background:var(--accent-soft);border-radius:4px;
+    padding:1px 7px;margin-right:12px;vertical-align:2px;letter-spacing:.05em;
+  }
+  .ladder .arw{color:#A8BFC4;padding:0 8px;}
+  /* 本页专用：纵向流程条 */
+  .flow-col{flex-direction:column;gap:0;}
+  .flow-col .flow-node{width:100%;max-width:580px;min-width:0;box-sizing:border-box;}
+  .flow-col .flow-node .en{font-size:.95rem;line-height:1.65;}
+  .flow-col .flow-arrow{padding:7px 0;transform:none;font-size:13px;}
+  /* 表格列宽微调 */
+  #sec-8 table td:nth-child(1),#sec-8 table th:nth-child(1){width:38px;}
+  #sec-8 table td:nth-child(3),#sec-8 table th:nth-child(3){white-space:nowrap;}
+  #sec-9 table td:nth-child(1),#sec-9 table th:nth-child(1){width:34px;}
+  #sec-9 table td:nth-child(2){width:26%;}
+  #sec-9 table td:nth-child(3){width:40%;}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<button id="sbToggle" aria-label="切换目录">
+  <span class="bars"><i></i><i></i><i></i></span><span>目录</span>
+</button>
+
+<aside id="sidebar">
+  <div class="sb-head">
+    <div class="sb-eyebrow">English Vocabulary Notes</div>
+    <div class="sb-title">英语课堂笔记<br><em>四级词汇 · 13 词</em></div>
+  </div>
+
+  <div class="sb-search">
+    <input id="search" type="search" placeholder="搜索词条 / 章节…" autocomplete="off">
+  </div>
+
+  <nav id="toc">
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>导读与图例</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-intro">这批笔记的来历</a></li>
+          <li><a href="#sec-intro">五色批注图例</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>一、本课概况</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-1">13 个词的分布</a></li>
+          <li><a href="#sec-1">记忆法四类统计</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>二、认知与判断</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#g1">本组导语</a></li>
+        </ul>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>认知与判断 · 共 3 词</button>
+          <ul>
+            <li><a href="#w1">01 rational</a></li>
+            <li><a href="#w2">02 exact</a></li>
+            <li><a href="#w3">03 rate</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>三、整体与部分</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#g2">本组导语</a></li>
+        </ul>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>整体与部分 · 共 5 词</button>
+          <ul>
+            <li><a href="#w4">04 skeleton</a></li>
+            <li><a href="#w5">05 fragment</a></li>
+            <li><a href="#w6">06 fraction</a></li>
+            <li><a href="#w7">07 portion</a></li>
+            <li><a href="#w8">08 proportion</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>四、远近与动静</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#g3">本组导语</a></li>
+        </ul>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>远近与动静 · 共 3 词</button>
+          <ul>
+            <li><a href="#w9">09 remote</a></li>
+            <li><a href="#w10">10 flash</a></li>
+            <li><a href="#w11">11 flourish</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>五、人与物</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#g4">本组导语</a></li>
+        </ul>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>人与物 · 共 2 词</button>
+          <ul>
+            <li><a href="#w12">12 deed</a></li>
+            <li><a href="#w13">13 flesh</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>六、词根词缀主线</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-6">五条构词线</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>七、易混词对照</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-7">六组必辨</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>八、词汇速查表</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-8">13 词全表</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>九、校订与存疑</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-9">7 处校订</a></li>
+          <li><a href="#sec-9">缺口提示</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>十、复习建议</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-10">五条执行建议</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sb-foot">
+    <span>13 词条 · 4 组</span>
+    <div class="fs-group">
+      <button id="fsDown" title="缩小字号">A−</button>
+      <button id="fsUp" title="放大字号">A+</button>
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="page-kicker">大学英语 · 词汇课笔记</div>
+    <h1>四级词汇 <em>13 词精讲</em></h1>
+    <p class="page-sub">课件截图整理 · 按「认知 → 数量 → 时空 → 具体」四层重排，记忆法逐条标注可靠性</p>
+    <div class="chips">
+      <span class="chip">来源 <b>13 张课件截图</b></span>
+      <span class="chip">词条 <b>13 个</b></span>
+      <span class="chip">记忆法 <b>4 类</b></span>
+      <span class="chip">校订 <b>7 处</b></span>
+    </div>
+  </header>
+
+  <div class="lede" id="sec-intro">
+    <b>这批不是课文精读，是词汇课。</b>课件标题《英语四级你还在背单词吗》，13 张截图对应 13 个词，每页格式统一：音标 → 词性释义 → 记忆法 → 真题例句。<br>
+    整理时没有照时间顺序抄，而是按<b>词义逻辑</b>分四组重排，并给每条例句补了中文译文；课件缺译文、缺搭配、个别释义不准的地方，全部红笔标出。
+  </div>
+
+  <div class="notice">
+    <span class="tag">缺口提示</span>按截图时间戳，<b>20:36→20:40、20:44→20:48</b> 各隔了 4 分钟以上，正常情况下能过 2–3 页课件。也就是说<b>这一课大概率还有词没截到</b>。整理时只处理手上这 13 个，没有替你补词；若有完整词表，建议对照补齐再背。
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>批注类型</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td><span style="color:var(--c-def);font-weight:700">释义辨析</span></td><td>词义内核、义项分层、易混词区别</td></tr>
+        <tr><td><span style="color:var(--c-mem);font-weight:700">记忆联想</span></td><td>课堂原话、谐音与拆字钩子</td></tr>
+        <tr><td><span style="color:var(--c-eg);font-weight:700">例句</span></td><td>课件真题句 + 中文译文</td></tr>
+        <tr><td><span style="color:var(--c-ext);font-weight:700">拓展延伸</span></td><td>词根词族、固定搭配、派生词</td></tr>
+        <tr><td><span style="color:var(--c-fix);font-weight:700">订正备注</span></td><td>课件释义不准、注音有误、记忆法误导</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section id="sec-1">
+    <h2>一、本课概况：13 个词怎么串</h2>
+
+    <p>课件是一页一词的流水讲法，直接抄下来还是一堆散词。按词义排一遍，脑子里才有网。</p>
+
+    <div class="flow flow-col">
+      <div class="flow-node"><span class="en">rational · exact · rate</span><span class="cn">① 认知与判断 · 3 词</span></div>
+      <span class="flow-arrow">↓</span>
+      <div class="flow-node"><span class="en">skeleton · fragment · fraction · portion · proportion</span><span class="cn">② 整体与部分 · 5 词（本课核心）</span></div>
+      <span class="flow-arrow">↓</span>
+      <div class="flow-node"><span class="en">remote · flash · flourish</span><span class="cn">③ 远近与动静 · 3 词</span></div>
+      <span class="flow-arrow">↓</span>
+      <div class="flow-node"><span class="en">deed · flesh</span><span class="cn">④ 人与物 · 2 词</span></div>
+    </div>
+
+    <h3>记忆法四类，可靠性不一样</h3>
+
+    <p>课件给了四种助记手段，但它们的「含金量」差得远。整理时逐个标了类型，免得把谐音梗当词义使。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>类型</th><th>本课用到</th><th>可靠度</th><th>怎么用</th></tr></thead>
+        <tbody>
+          <tr><td>词根词缀</td><td class="t-term">remote、exact</td><td>高</td><td>能迁移到几十个词，优先记</td></tr>
+          <tr><td>形近对照</td><td class="t-term">flesh（vs fresh / flash）</td><td>高</td><td>专治拼写题与听力干扰</td></tr>
+          <tr><td>场景联想</td><td class="t-term">rational、rate、fragment、fraction、proportion、skeleton、flash、flourish</td><td>中</td><td>当回忆钩子，理解义项还得靠词根本身</td></tr>
+          <tr><td>谐音拆字</td><td class="t-term">portion（剖心）、skeleton（撕开了漏一吨）、deed（did）</td><td>低</td><td>只在「怎么读」上帮忙，别据此推词义</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="anno fix">
+      <span class="tag">订正备注</span>说句不客气的：<b>谐音法只能当钩子，不能当理解。</b>「portion = 剖心」记住了读音，但考场上要你选 a large portion of 还是 a large proportion of，钩子一点忙都帮不上。这一课真正值钱的是 fragment / fraction / portion / proportion 这条「部分家族」线，得靠词根和搭配记。
+    </div>
+  </section>
+
+  <section id="g1">
+    <h2>二、认知与判断</h2>
+
+    <p>先立标准：怎么想（rational）、怎么算准（exact）、怎么评价（rate）。</p>
+
+    <article class="word" id="w1">
+      <div class="word-hd"><span class="idx">01</span><span class="term">rational</span><span class="pos">a.</span><span class="cn">合理的；理性的；明智的</span></div>
+      <div class="phon">/ˈræʃnəl/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>ratio（比例）+ -nal（形容词后缀）→ 凡事按比例、讲依据，就是「理性的」。反义 irrational。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>一个人总用比例（ratio）来说话，是不是很「理性的」？</b>——用一个具体动作把抽象词钉住，比背释义稳。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>There is no rational explanation for his actions.</em>（对他的所作所为，找不出合理的解释。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>派生：<b>irrational</b> /ɪˈræʃənl/ a. 不合逻辑的；没有道理的。<br>同根串记：<b>ratio</b> 比例 → <b>ration</b> 定量、配给 → <b>rationale</b> 根本理由 → <b>rationalize</b> 使合理化。一个词根管四个词。</div>
+    </article>
+    <article class="word" id="w2">
+      <div class="word-hd"><span class="idx">02</span><span class="term">exact</span><span class="pos">a. / v.</span><span class="cn">准确的，精确的；严谨的 ‖ 强索，勒索</span></div>
+      <div class="phon">/ɪɡˈzækt/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>a. 义强调「分毫不差」，比 correct 更强调细节吻合；也可形容人「严谨的」，如 an exact scholar。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂拆法：<b>ex（出去）+ act（表演）</b>→ 读武校的学生若能出去表演武术，动作必须是「准确的、精确的」。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>He is not familiar with the exact details of the …</em>（他对……的确切细节并不熟悉。）<span style="color:#8C8478">⌗ 该句画面被裁切，尾部未拍全。</span></div>
+      <div class="anno fix"><span class="tag">订正备注</span>课件把 v. 义注为「要求；迫使」，偏中性。exact 作动词是<b>强索、勒索</b>，语气比 demand 硬，标准结构是 <b>exact sth from sb</b>：<em>exact a heavy tax from the peasants</em>。写成「要求」容易在写作里用错语气。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>必背短语：<b>to be exact</b> 确切地说。<br>同族：exactly ad. 恰好；exacting a. 严苛的、要求高的（不是「精确的」）；exactness n. 精确。</div>
+    </article>
+    <article class="word" id="w3">
+      <div class="word-hd"><span class="idx">03</span><span class="term">rate</span><span class="pos">n. / v.</span><span class="cn">速度；比率；价格 ‖ 评价，认为</span></div>
+      <div class="phon">/reɪt/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>n. 三个高频义项要分开：<b>速度</b>（at a fast rate）、<b>比率</b>（birth / divorce / exchange rate）、<b>价格</b>（hotel rates，多用复数）。v. 义是「评价、认为」，也可指「把……列为（某等级）」。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>老鼠（rat）出来（e），看看四周无人，「速度」很快地窜去找吃的。</b>课件上还手写了 rat + e 的拆字。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The divorce rate in the county has been on a steady rise.</em>（该县的离婚率一直在稳步上升。）</div>
+      <div class="anno fix"><span class="tag">订正备注</span>课件 v. 义写「被列为」，但主动形式不能直接译成被动。rate 作动词是<b>主动评价</b>：<em>They rate him highly.</em>（他们对他评价很高。）「被列为」是 <b>be rated as</b> 的被动结构，别把被动义塞进原形。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>高频短语：<b>at any rate</b> 无论如何；<b>at this rate</b> 照这样下去；<b>rate A as B</b> 把 A 评为 B。<br>易混：<b>rate</b> 是「率」（有单位、可比较），<b>ratio</b> 是「比」（两数相除的关系），考试常拿这两个做干扰项。</div>
+    </article>
+  </section>
+
+  <section id="g2">
+    <h2>三、整体与部分</h2>
+
+    <p>这一组是本课核心：骨架（skeleton）与四种「部分」，五个词必须成组记，单记必串。</p>
+
+    <article class="word" id="w4">
+      <div class="word-hd"><span class="idx">04</span><span class="term">skeleton</span><span class="pos">n.</span><span class="cn">骨骼；梗概；框架</span></div>
+      <div class="phon">/ˈskelɪtn/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>本义「骨骼」，引申为支撑整体的「骨架、框架」，再抽象为文章的「提纲、梗概」：<em>the skeleton of an argument</em>。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>撕开了（skele 谐音），漏出一吨（ton）的「骨骼」。</b>纯谐音梗，只管把读音和「骨头」挂钩。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The human skeleton consists of 206 bones.</em>（人体骨骼由 206 块骨构成。）</div>
+      <div class="anno fix"><span class="tag">订正备注</span>课件注音 /ˈskelt(ə)n/ 容易让人读成「skel-tən」。标准音标是 <b>/ˈskelɪtn/</b>，第二音节是 /ɪ/ 不是 /e/，重音在第一音节。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>实用搭配：<b>skeleton key</b> 万能钥匙；<b>a skeleton crew</b> 最低限度的人手；<b>skeleton in the closet</b> 不可告人的家丑。</div>
+    </article>
+    <article class="word" id="w5">
+      <div class="word-hd"><span class="idx">05</span><span class="term">fragment</span><span class="pos">n. / v.</span><span class="cn">碎片；片段 ‖ 破碎，分裂</span></div>
+      <div class="phon">/ˈfræɡmənt/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>可数名词，指从整体上掉下来、碎下来的一块：<em>fragments of glass</em>；也可指文字、记忆的「片段」。作动词读 /fræɡˈment/，重音后移。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂拆法：<b>fr（芙蓉）+ ag（阿哥）+ m（门）</b>——芙蓉想要阿哥的瓷器，阿哥不给，争抢中把瓷器摔到门上，就「碎」成一片片。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>Dreaming resembles fragments of science fiction.</em>（梦境与科幻小说的片段颇为相似。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>词根 <b>frag / fract = 打碎</b>：fragment 碎片 → <b>fragile</b> 易碎的 → <b>fracture</b> 骨折、断裂 → <b>fraction</b> 小部分。一个词根串起四个四级词，比谐音管用。</div>
+    </article>
+    <article class="word" id="w6">
+      <div class="word-hd"><span class="idx">06</span><span class="term">fraction</span><span class="pos">n.</span><span class="cn">小部分；少量；一点儿</span></div>
+      <div class="phon">/ˈfrækʃn/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>核心是「一小块」，强调<b>数量上极少</b>：<em>a fraction of a second</em> 一瞬间。数学里的「分数」也是这个词。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂拆法：<b>芙蓉（fr）的行为（action）</b>，不是所有人都能接受 → 只有「小部分、少量」。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>Only a tiny fraction of Americans change any behaviors in an effort to preserve their privacy.</em>（只有极小一部分美国人会为保护隐私而改变自己的行为。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>搭配：<b>a fraction of</b> 一小部分；<b>by a fraction</b> 差一点点。<br>注意 fraction 与 fragment 的分工：fraction 讲<b>量的比例</b>（抽象、不可数感强），fragment 讲<b>具体的碎片</b>（可数、能摸到）。</div>
+    </article>
+    <article class="word" id="w7">
+      <div class="word-hd"><span class="idx">07</span><span class="term">portion</span><span class="pos">n. / v.</span><span class="cn">部分；一份 ‖ 把……分成若干份</span></div>
+      <div class="phon">/ˈpɔːʃn/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>强调<b>按份儿分出来的那一份</b>，比 part 更有「配给」的意味：<em>a generous portion of rice</em> 一大份米饭。作动词是「分配」，常用 <b>portion out</b>。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂谐音：<b>「剖心」</b>——比干为表忠心剖心，可毕竟不是所有人都会这样做，所以剖心只是「部分人」的选择 → 部分；一份。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>We get a fairly large portion of calories from fast food and snacks.</em>（我们从快餐和零食中摄入的热量占了相当大一部分。）<span style="color:#8C8478">⌗ 原句「fast food」处被人物遮挡，按上下文补全。</span></div>
+      <div class="anno fix"><span class="tag">订正备注</span>谐音可以当钩子，但 <b>portion 和 proportion 只差一个 pro-</b>，靠「剖心」记两个词必然串。正确记法：<b>proportion = pro（向前、相应）+ portion（份）</b>→ 各份之间相应 → 比例。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>词源提醒：portion 来自拉丁 <b>portio</b>（份额），与 port（搬运）<b>不同源</b>，别硬拆成「搬一份」。</div>
+    </article>
+    <article class="word" id="w8">
+      <div class="word-hd"><span class="idx">08</span><span class="term">proportion</span><span class="pos">n.</span><span class="cn">部分；份额；比例</span></div>
+      <div class="phon">/prəˈpɔːʃn/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>三层意思逐层抽象：占的「份额」（a large proportion of staff）→ 两者间的「比例」（the proportion of A to B）→ 相称、均衡（a sense of proportion 分寸感）。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>提前（pro）就会剖心（portion）的人就更少了</b>，也是「部分、份额」的意思。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>As is now the case in many big firms, a large proportion of staff are temporary contractors.</em>（正如如今许多大公司的情形，很大一部分员工是临时合同工。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>派生：<b>proportional</b> a. 相称的、成比例的；<b>proportionate</b> a. 成比例的。<br>短语：<b>in proportion to</b> 与……成比例；<b>out of proportion</b> 不成比例、不相称。<br>语法点：<b>a large proportion of + 复数名词</b> 作主语，谓语用复数（真题里就是 are）。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>课件把「面积」单列为一个义项，不妥。词典没有 proportion = 面积的独立义项，那是「比例」在几何题里的具体说法。照「面积」去背，选择题考 proportion 时反而会想岔。</div>
+    </article>
+  </section>
+
+  <section id="g3">
+    <h2>四、远近与动静</h2>
+
+    <p>空间上的远（remote）、时间上的一瞬（flash）、生长上的旺（flourish）。</p>
+
+    <article class="word" id="w9">
+      <div class="word-hd"><span class="idx">09</span><span class="term">remote</span><span class="pos">a.</span><span class="cn">遥远的；远程的；偏远的</span></div>
+      <div class="phon">/rɪˈməʊt/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>空间上「远」→ 方式上「远程」（remote control）→ 可能性上「渺茫」（a remote chance）。三个引申方向都从「离得远」来。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂拆法：<b>re（回、反复）+ mote（= move 移动）</b>→ 来回移动，就越来越远了 → 遥远的；远程的。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>Your university is selecting some students to teach kids in remote rural areas during the coming vacation.</em>（你们学校正在挑选一些学生，在即将到来的假期去偏远农村给孩子支教。）</div>
+      <div class="anno fix"><span class="tag">订正备注</span>课件把 re- 解作「重复」，讲不通——「重复移动」不等于「远」。re- 在这里是<b>向后、离开</b>（away / back），mote = move，「移开去」才是遥远。词缀释义记错，下次遇到 remove、retreat 会一起错。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>搭配：<b>remote control</b> 遥控；<b>remote sensing</b> 遥感；<b>remote access</b> 远程访问。<br>派生：remotely ad. 远程地、丝毫（not remotely interested）；remoteness n. 偏远。</div>
+    </article>
+    <article class="word" id="w10">
+      <div class="word-hd"><span class="idx">10</span><span class="term">flash</span><span class="pos">n. / v.</span><span class="cn">闪光；闪现 ‖ 闪光，闪烁</span></div>
+      <div class="phon">/flæʃ/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>一次短促的强光，引申为「一闪而过」：<em>a flash of insight</em> 灵光一闪。作动词既可不及物（灯在闪），也可及物（闪灯示意）。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>这个单词我们很熟悉，因为大学里学过 Flash（网页动画制作程序）。flash 其实不是动画，是「闪过的东西」</b>——就像网页上突然跳出来的广告 → 闪现。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The car keeps flashing its headlights.</em>（那辆车一直在闪前灯。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>高频短语：<b>in a flash</b> 转瞬间；<b>a flash in the pan</b> 昙花一现；<b>flashback</b> 闪回。<br>注意 flash 作及物动词时宾语是被闪的东西：flash a light / flash a card（亮一下证件）。</div>
+    </article>
+    <article class="word" id="w11">
+      <div class="word-hd"><span class="idx">11</span><span class="term">flourish</span><span class="pos">v.</span><span class="cn">繁荣；茂盛；兴旺</span></div>
+      <div class="phon">/ˈflʌrɪʃ/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>主语多为植物、生意、文化——强调「长得旺」，不是单纯的 increase。也可作名词，指夸张的挥舞动作（挥剑、签名花体）。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>该词前半部分发音类似 flower（花）</b>，想到花，就想到洛阳牡丹「茂盛」生长的样子。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>UNESCO gave Italy two years to manage Venice’s flourishing tourism.</em>（联合国教科文组织给了意大利两年时间，来管理威尼斯蓬勃发展的旅游业。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>词根 <b>flor / flour = 花</b>：flower 花 → floral 花的 → floret 小花 → flourish 开花般兴旺。<br>易混：<b>flour</b>（面粉）与 <b>flourish</b> 只差三个字母，同源于「花」，但一个是名词一个是动词，拼写必须分清。</div>
+    </article>
+  </section>
+
+  <section id="g4">
+    <h2>五、人与物</h2>
+
+    <p>落到具体：人做的事（deed）和身上的肉（flesh）。</p>
+
+    <article class="word" id="w12">
+      <div class="word-hd"><span class="idx">12</span><span class="term">deed</span><span class="pos">n.</span><span class="cn">行为；行动</span></div>
+      <div class="phon">/diːd/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>指<b>做出来的事</b>，带评价色彩，常与 good / evil / brave 连用；法律语境另有「契据、证书」义（title deed 房产证）。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂原话：<b>该单词谐音类似 did（做），做就是「行动」。</b></div>
+      <div class="anno eg"><span class="tag">例句</span><em>The tourists’ good deed was not noticed by the locals.</em>（游客的善举没有被当地人注意到。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>固定说法：<b>do a good deed</b> 做善事；<b>in deed</b> 在行动上（与 in word 相对）；<b>indeed</b> 与 deed 同源，本义「在事实上」。<br>deed 与 act / action 的区别：deed 更书面、更强评价，日常「动作」用 act。</div>
+    </article>
+    <article class="word" id="w13">
+      <div class="word-hd"><span class="idx">13</span><span class="term">flesh</span><span class="pos">n.</span><span class="cn">肉；（果）肉</span></div>
+      <div class="phon">/fleʃ/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>指人或动物身上的<b>肉</b>（区别于骨、皮），也指果实的<b>果肉</b>。不可数名词，不能说 a flesh。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂形近对照：<b>这个词很像 fresh（新鲜的），新鲜的是什么？「果肉」啊。</b></div>
+      <div class="anno eg"><span class="tag">例句</span><em>The flesh of fruit is white.</em>（这种水果的果肉是白色的。）</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>高频表达：<b>flesh and blood</b> 血肉之躯、亲骨肉；<b>in the flesh</b> 本人、活生生地；<b>flesh out</b> 充实（内容）。<br>课件释义只给了「肉；果肉」，漏了最常考的 <b>「（人体的）肌肤、肉体」</b> 义，the flesh 可指肉体欲望。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>形近三兄弟必须一次分清：<b>flesh</b> 肉、<b>fresh</b> 新鲜的、<b>flash</b> 闪光。三个词只差一个字母位置，四级听力里就是靠这个设坑。</div>
+    </article>
+  </section>
+
+  <section id="sec-6">
+    <h2>六、词根词缀主线</h2>
+
+    <p>13 个词里有 8 个能挂到词根上。挂上去之后，记的就不是 8 个词，是 5 条线。</p>
+
+    <div class="ladder">
+      <span class="lb">frag / fract</span>打碎<span class="arw">→</span>fragment 碎片 · fraction 小部分 · fragile 易碎的 · fracture 骨折<br>
+      <span class="lb">portio</span>份额<span class="arw">→</span>portion 一份 · proportion 比例 · proportional 成比例的<br>
+      <span class="lb">flor / flour</span>花<span class="arw">→</span>flourish 兴旺 · flower 花 · floral 花的 · flour 面粉<br>
+      <span class="lb">ex-</span>向外<span class="arw">→</span>exact 精确的（做出来分毫不差）· expose 暴露 · exceed 超出<br>
+      <span class="lb">re-</span>向后、离开<span class="arw">→</span>remote 遥远的 · remove 移开 · retreat 后退
+    </div>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span>特别注意 <b>re- 有两个面孔</b>：表「重复」（rewrite、rebuild）和表「向后、离开」（remote、remove、retreat）。课件把 remote 的 re- 说成「重复」，方向反了。判断方法：动词带「回、退、离」的意思，re- 就是后者。
+    </div>
+
+    <div class="anno ext">
+      <span class="tag">拓展延伸</span><b>rational 那一族</b>也值得单列：ratio 比例 → ration 定量配给 → rational 理性的 → rationale 根本理由 → rationalize 使合理化。五个词一条链，四级写作里 rationale、rationalize 都是加分词。
+    </div>
+  </section>
+
+  <section id="sec-7">
+    <h2>七、易混词对照</h2>
+
+    <p>这一课最容易失分的不是生词，是长得像的词。六组，逐个钉死。</p>
+
+    <h3>第一组：四种「部分」</h3>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>词</th><th>核心义</th><th>可数</th><th>典型搭配</th></tr></thead>
+        <tbody>
+          <tr><td class="t-term">skeleton</td><td>骨架、框架、提纲</td><td>可数</td><td>the skeleton of an essay</td></tr>
+          <tr><td class="t-term">fragment</td><td>碎片（摸得到的一块）</td><td>可数</td><td>fragments of glass / memory</td></tr>
+          <tr><td class="t-term">fraction</td><td>一小部分（量极少）</td><td>可数</td><td>a tiny fraction of</td></tr>
+          <tr><td class="t-term">portion</td><td>一份（按份分出来的）</td><td>可数</td><td>a portion of rice; portion out</td></tr>
+          <tr><td class="t-term">proportion</td><td>份额；比例；相称</td><td>可数 / 不可数</td><td>a large proportion of; in proportion to</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span>一句话分清：<b>fragment 是碎的，fraction 是少的，portion 是分的，proportion 是比的。</b>四个字各管一个词，考前扫一眼就够。
+    </div>
+
+    <h3>第二组：rate vs ratio</h3>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span><b>rate</b> 是「率」，带单位、可比较高低：birth rate、divorce rate、exchange rate。<b>ratio</b> 是「比」，两个数的相除关系，不带单位：the ratio of boys to girls。选择题里两个一起出现，看有没有单位就能排除。
+    </div>
+
+    <h3>第三组：flesh / fresh / flash</h3>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span>三个词只差一个字母的位置：<b>flesh</b> /fleʃ/ 肉、果肉；<b>fresh</b> /freʃ/ 新鲜的；<b>flash</b> /flæʃ/ 闪光。读音上 flesh 与 fresh 的差别只在 /l/ 与 /r/，听力里最容易混。
+    </div>
+
+    <h3>第四组：flour / flourish / flower</h3>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span>三个词同源于「花」：<b>flower</b> 花；<b>flourish</b> 像开花一样兴旺（动词）；<b>flour</b> 面粉（本指「磨出的精华部分」，即麦子的「花」）。拼写上 flourish 比 flour 多 ish，别漏写。
+    </div>
+
+    <h3>第五组：exact / exacting</h3>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span><b>exact</b> a. 精确的；<b>exacting</b> a. 严苛的、要求高的（指人或工作）。<em>an exact teacher</em> 是「严谨的老师」，<em>an exacting teacher</em> 是「苛刻的老师」，感情色彩完全不同。
+    </div>
+
+    <h3>第六组：rational / rationale</h3>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span><b>rational</b> a. 理性的；<b>rationale</b> n. 根本理由、理论基础（读音 /ˌræʃəˈnɑːl/，重音在最后，别按 rational 读）。写作里用 the rationale behind sth 比 the reason for sth 更书面。
+    </div>
+  </section>
+
+  <section id="sec-8">
+    <h2>八、词汇速查表</h2>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>词</th><th>音标</th><th>词性 · 释义</th><th>必背搭配 / 派生</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td class="t-term">rational</td><td>/ˈræʃnəl/</td><td>a. 理性的；合理的</td><td>irrational 反义；ratio / ration / rationale</td></tr>
+          <tr><td>02</td><td class="t-term">exact</td><td>/ɪɡˈzækt/</td><td>a. 精确的 ‖ v. 强索</td><td>to be exact；exact sth from sb；exacting</td></tr>
+          <tr><td>03</td><td class="t-term">rate</td><td>/reɪt/</td><td>n. 速度；比率；价格 ‖ v. 评价</td><td>at any rate；rate A as B</td></tr>
+          <tr><td>04</td><td class="t-term">skeleton</td><td>/ˈskelɪtn/</td><td>n. 骨骼；框架；提纲</td><td>skeleton key；a skeleton crew</td></tr>
+          <tr><td>05</td><td class="t-term">fragment</td><td>/ˈfræɡmənt/</td><td>n. 碎片；片段 ‖ v. 破碎</td><td>fragments of；fragile；fracture</td></tr>
+          <tr><td>06</td><td class="t-term">fraction</td><td>/ˈfrækʃn/</td><td>n. 小部分；少量</td><td>a fraction of；a fraction of a second</td></tr>
+          <tr><td>07</td><td class="t-term">portion</td><td>/ˈpɔːʃn/</td><td>n. 部分；一份 ‖ v. 分配</td><td>a portion of；portion out</td></tr>
+          <tr><td>08</td><td class="t-term">proportion</td><td>/prəˈpɔːʃn/</td><td>n. 份额；比例；相称</td><td>in proportion to；out of proportion；proportional</td></tr>
+          <tr><td>09</td><td class="t-term">remote</td><td>/rɪˈməʊt/</td><td>a. 遥远的；远程的；渺茫的</td><td>remote control；remote sensing；remotely</td></tr>
+          <tr><td>10</td><td class="t-term">flash</td><td>/flæʃ/</td><td>n. 闪光 ‖ v. 闪烁</td><td>in a flash；a flash in the pan；flashback</td></tr>
+          <tr><td>11</td><td class="t-term">flourish</td><td>/ˈflʌrɪʃ/</td><td>v. 繁荣；茂盛；兴旺</td><td>flourishing 繁荣的；floral；flour</td></tr>
+          <tr><td>12</td><td class="t-term">deed</td><td>/diːd/</td><td>n. 行为；契据</td><td>do a good deed；in deed；indeed</td></tr>
+          <tr><td>13</td><td class="t-term">flesh</td><td>/fleʃ/</td><td>n. 肉；果肉</td><td>flesh and blood；in the flesh；flesh out</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec-9">
+    <h2>九、校订与存疑</h2>
+
+    <p>课件不是手写稿，但它照样会出错——而且课件的错更危险，因为看起来像标准答案。下面 7 处逐条标出，已经嵌在上面各词条里。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>课件原说法</th><th>问题</th><th>应为</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>exact v. 要求；迫使</td><td>释义偏中性，漏掉「强索」的强硬语气</td><td class="t-fix">exact sth from sb 强索、勒索</td></tr>
+          <tr><td>2</td><td>remote re-＝重复</td><td>「重复移动」推不出「遥远」，词缀方向搞反</td><td class="t-fix">re- 表向后、离开（away）</td></tr>
+          <tr><td>3</td><td>proportion n. 面积</td><td>词典无此独立义项，属「比例」的几何化说法</td><td class="t-fix">删去「面积」，只留份额 / 比例 / 相称</td></tr>
+          <tr><td>4</td><td>portion 谐音「剖心」</td><td>与 proportion 只差 pro-，靠谐音必串；且词源是拉丁 portio，与「心」无关</td><td class="t-fix">改用 pro + portion 结构记</td></tr>
+          <tr><td>5</td><td>skeleton 注音 /ˈskelt(ə)n/</td><td>易读成 skel-tən，第二音节标错</td><td class="t-fix">/ˈskelɪtn/</td></tr>
+          <tr><td>6</td><td>flesh 释义「肉；果肉」</td><td>漏掉最常考的「肌肤、肉体」义</td><td class="t-fix">补 the flesh 肉体；flesh and blood</td></tr>
+          <tr><td>7</td><td>rate v.「被列为」</td><td>主动形式不能译成被动，被动要靠 be rated as</td><td class="t-fix">v. 评价、认为；be rated as 被列为</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>另外两处，只能标「待核」</h3>
+
+    <div class="anno fix">
+      <span class="tag">订正备注</span><b>其一，例句被裁切。</b>exact 那条的真题句子在画面下沿被切断（<em>…the exact details of the …</em>），portion 那条的 fast food 被人物挡住。我没有替你编完整句子——exact 那条按「尾部缺失」处理，portion 那条按上下文补全为 fast food 并加了标记。要用这两句当背诵素材，得回视频确认。
+    </div>
+
+    <div class="anno fix">
+      <span class="tag">订正备注</span><b>其二，词表有缺口。</b>13 张截图的时间戳跨度 20:32–20:51，其中 20:36→20:40、20:44→20:48 各断了 4 分钟以上，按一页一词的节奏，中间很可能漏了 2–4 个词。这不是整理能补的，得重新截或找词表。
+    </div>
+  </section>
+
+  <section id="sec-10">
+    <h2>十、复习建议</h2>
+
+    <ol class="steps">
+      <li><b>先补漏，再背。</b>按时间戳，这一课至少缺两段。缺口不补，背下来的 13 个词也接不上前后文，复习时还得重来一遍。</li>
+      <li><b>「部分家族」五个词默写一遍。</b>skeleton / fragment / fraction / portion / proportion，要求能一句话说清各自区别。这是本课唯一成体系的考点，其他都是散词。</li>
+      <li><b>谐音钩子只用来记发音。</b>portion 剖心、skeleton 一吨、deed 谐音 did——记住读音就够了，别拿它推词义。真要记词义，回词根：portio 份额、fract 打碎。</li>
+      <li><b>七个搭配当短语背。</b>at any rate、in proportion to、exact sth from sb、rate A as B、a fraction of、portion out、in a flash。四级词汇题考搭配的频次高于考释义。</li>
+      <li><b>三组形近词做听写。</b>flesh/fresh/flash、flour/flourish/flower、exact/exacting。自己念、自己写，写错一次就抄三遍——这三组是听力与拼写双料坑。</li>
+    </ol>
+  </section>
+
+  <div class="related">
+    相关笔记：英语课堂笔记_Unit1_Language_Learning（Unit 1 · 14 词）｜英语课堂笔记_Unit2_About_Education（Unit 2 · 36 词）｜英语词汇笔记整理（第 1 辑 · 48 词）｜英语词汇笔记整理_第2辑（第 2 辑 · 20 词）
+  </div>
+
+</div>
+</main>
+
+<button id="toTop" title="返回顶部">↑</button>
+<div id="backdrop"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 1. 目录折叠 ---------- */
+  document.querySelectorAll('.toc-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.parentElement.classList.toggle('closed');
+    });
+  });
+  document.querySelectorAll('.toc-sub-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      btn.parentElement.classList.toggle('closed');
+    });
+  });
+
+  /* ---------- 2. 侧栏收起 / 展开 ---------- */
+  var body = document.body,
+      toggle = document.getElementById('sbToggle'),
+      isMobile = function(){ return window.innerWidth <= 860; };
+
+  toggle.addEventListener('click', function(){
+    if (isMobile()) {
+      body.classList.toggle('sb-open');
+      toggle.querySelector('span:last-child').textContent =
+        body.classList.contains('sb-open') ? '收起' : '目录';
+    } else {
+      body.classList.toggle('sb-hidden');
+      toggle.querySelector('span:last-child').textContent =
+        body.classList.contains('sb-hidden') ? '目录' : '收起';
+    }
+  });
+
+  /* ---------- 3. 搜索过滤 ---------- */
+  var search = document.getElementById('search');
+  search.addEventListener('input', function(){
+    var q = search.value.trim().toLowerCase();
+
+    document.querySelectorAll('#toc li').forEach(function(li){
+      if (!q) { li.classList.remove('hidden'); return; }
+      li.classList.toggle('hidden', li.textContent.toLowerCase().indexOf(q) === -1);
+    });
+
+    document.querySelectorAll('.toc-sub').forEach(function(sub){
+      var visible = sub.querySelectorAll('li:not(.hidden)').length;
+      sub.style.display = (!q || visible) ? '' : 'none';
+      if (q && visible) sub.classList.remove('closed');
+    });
+
+    document.querySelectorAll('.toc-chap').forEach(function(chap){
+      var items = chap.querySelectorAll('li:not(.hidden)');
+      var direct = chap.querySelectorAll(':scope > .toc-body > ul > li:not(.hidden)');
+      var visible = items.length + direct.length;
+      chap.style.display = (!q || visible) ? '' : 'none';
+      if (q && visible) chap.classList.remove('closed');
+    });
+  });
+
+  /* ---------- 4. 滚动高亮 + 进度条 ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc a')),
+      targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }),
+      progress = document.getElementById('progress'),
+      toTop = document.getElementById('toTop');
+
+  function onScroll(){
+    var y = window.scrollY + 120,
+        idx = targets.length ? 0 : -1;
+
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i] && targets[i].offsetTop <= y) idx = i;
+    }
+
+    links.forEach(function(a, i){ a.classList.toggle('active', i === idx); });
+
+    if (idx > -1) {
+      var active = links[idx];
+      var sub = active.closest('.toc-sub');
+      if (sub) sub.classList.remove('closed');
+      var chap = active.closest('.toc-chap');
+      if (chap) chap.classList.remove('closed');
+      // 滚动侧栏使激活项可见
+      var sb = document.getElementById('toc');
+      var r = active.getBoundingClientRect(),
+          sr = sb.getBoundingClientRect();
+      if (r.top < sr.top + 40 || r.bottom > sr.bottom - 40) {
+        active.scrollIntoView({block:'nearest'});
+      }
+    }
+
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? (window.scrollY / h * 100) : 0) + '%';
+    toTop.classList.toggle('show', window.scrollY > 600);
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------- 5. 字号调节 ---------- */
+  var fs = 17.5;
+  function applyFs(){
+    fs = Math.min(22, Math.max(15, fs));
+    document.documentElement.style.setProperty('--fs-base', fs + 'px');
+  }
+  document.getElementById('fsUp').addEventListener('click', function(){ fs += 1; applyFs(); });
+  document.getElementById('fsDown').addEventListener('click', function(){ fs -= 1; applyFs(); });
+
+  /* ---------- 6. 返回顶部 ---------- */
+  toTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ---------- 7. 点击目录项后移动端收起 ---------- */
+  links.forEach(function(a){
+    a.addEventListener('click', function(){
+      if (isMobile()) {
+        body.classList.remove('sb-open');
+        toggle.querySelector('span:last-child').textContent = '目录';
+      }
+    });
+  });
+
+  /* ---------- 8. 点击遮罩关闭抽屉 ---------- */
+  document.getElementById('backdrop').addEventListener('click', function(){
+    body.classList.remove('sb-open');
+    toggle.querySelector('span:last-child').textContent = '目录';
+  });
+})();
+</script>
+</body>
+</html>

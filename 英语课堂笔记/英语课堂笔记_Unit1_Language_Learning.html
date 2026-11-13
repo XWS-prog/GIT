@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英语课堂笔记 · Unit 1 Language Learning</title>
+<style>
+  :root{
+    --paper:#F6F2EA;
+    --card:#FFFFFF;
+    --ink:#2C2A25;
+    --ink-soft:#5A544A;
+    --ink-mute:#8C8478;
+    --line:#E4DCCE;
+    --line-soft:#EFE8DB;
+    --accent:#1F4E5F;
+    --accent-soft:#E8F0F2;
+
+    --c-def:#7C3AED;  --bg-def:#F5F1FF;
+    --c-mem:#C2410C;  --bg-mem:#FDF3EC;
+    --c-eg:#047857;   --bg-eg:#ECF8F3;
+    --c-ext:#0E7490;  --bg-ext:#ECF6F9;
+    --c-fix:#DC2626;  --bg-fix:#FDEDED;
+
+    --fs-base:17.5px;
+    --sidebar:308px;
+    --serif:Georgia,"Times New Roman","Songti SC",serif;
+    --sans:"Segoe UI","Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);font-size:var(--fs-base);line-height:1.9;
+    -webkit-font-smoothing:antialiased;
+  }
+  body.sb-hidden{--sidebar:0px;}
+
+  /* ============ 顶部进度条 ============ */
+  #progress{
+    position:fixed;top:0;left:0;height:3px;width:0;
+    background:linear-gradient(90deg,#1F4E5F,#3E8E9B);
+    z-index:120;transition:width .12s linear;
+  }
+
+  /* ============ 侧栏 ============ */
+  #sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);
+    background:#FBF8F2;border-right:1px solid var(--line);
+    display:flex;flex-direction:column;z-index:90;
+    transition:transform .28s ease, opacity .2s ease;
+  }
+  body.sb-hidden #sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;}
+
+  .sb-head{padding:26px 22px 16px;border-bottom:1px solid var(--line-soft);}
+  .sb-eyebrow{
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-mute);margin-bottom:6px;font-weight:600;
+  }
+  .sb-title{font-size:16.5px;font-weight:700;line-height:1.45;color:var(--ink);}
+  .sb-title em{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);}
+
+  .sb-search{padding:14px 18px 10px;}
+  .sb-search input{
+    width:100%;padding:9px 12px 9px 32px;border:1px solid var(--line);
+    border-radius:8px;background:var(--card);font-family:var(--sans);
+    font-size:13.5px;color:var(--ink);outline:none;transition:.18s;
+  }
+  .sb-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .sb-search{position:relative;}
+  .sb-search::before{
+    content:"⌕";position:absolute;left:29px;top:20px;
+    font-size:16px;color:var(--ink-mute);pointer-events:none;
+  }
+
+  /* 目录树 */
+  #toc{flex:1;overflow-y:auto;padding:6px 12px 24px;scrollbar-width:thin;}
+  #toc::-webkit-scrollbar{width:7px;}
+  #toc::-webkit-scrollbar-thumb{background:#DED5C5;border-radius:4px;}
+
+  .toc-chap{margin-bottom:2px;}
+  .toc-btn{
+    width:100%;display:flex;align-items:center;gap:8px;
+    background:none;border:0;cursor:pointer;text-align:left;
+    font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink-soft);
+    padding:8px 8px 8px 6px;border-radius:7px;line-height:1.5;transition:.15s;
+  }
+  .toc-btn:hover{background:#F2ECE1;color:var(--ink);}
+  .toc-btn .caret{
+    flex:0 0 auto;width:14px;font-size:10px;color:var(--ink-mute);
+    transition:transform .2s ease;display:inline-block;
+  }
+  .toc-chap.closed > .toc-btn .caret{transform:rotate(-90deg);}
+  .toc-chap.closed > .toc-body{display:none;}
+  .toc-body{padding-left:8px;border-left:1px solid var(--line-soft);margin-left:12px;}
+
+  .toc-sub{margin:1px 0;}
+  .toc-sub-btn{
+    width:100%;display:flex;align-items:center;gap:7px;background:none;border:0;
+    cursor:pointer;text-align:left;font-family:var(--sans);font-size:12.5px;
+    font-weight:600;color:var(--ink-mute);padding:6px 8px;border-radius:6px;
+    letter-spacing:.02em;transition:.15s;
+  }
+  .toc-sub-btn:hover{background:#F2ECE1;color:var(--ink-soft);}
+  .toc-sub-btn .caret{font-size:9px;transition:transform .2s ease;width:11px;flex:0 0 auto;}
+  .toc-sub.closed > .toc-sub-btn .caret{transform:rotate(-90deg);}
+  .toc-sub.closed > ul{display:none;}
+
+  #toc ul{list-style:none;margin:0;padding:0 0 4px 10px;}
+  #toc li a{
+    display:block;font-size:13px;color:var(--ink-soft);text-decoration:none;
+    padding:5px 8px 5px 10px;border-left:2px solid transparent;border-radius:0 5px 5px 0;
+    line-height:1.55;transition:.15s;
+  }
+  #toc li a:hover{background:#F2ECE1;color:var(--accent);}
+  #toc li a.active{
+    border-left-color:var(--accent);background:var(--accent-soft);
+    color:var(--accent);font-weight:600;
+  }
+  #toc .hidden{display:none;}
+
+  .sb-foot{
+    border-top:1px solid var(--line-soft);padding:12px 18px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:12px;color:var(--ink-mute);background:#FBF8F2;
+  }
+  .fs-group{display:flex;align-items:center;gap:4px;}
+  .fs-group button{
+    width:26px;height:26px;border:1px solid var(--line);background:var(--card);
+    border-radius:6px;cursor:pointer;color:var(--ink-soft);font-size:13px;
+    line-height:1;transition:.15s;
+  }
+  .fs-group button:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ============ 侧栏开关 ============ */
+  #sbToggle{
+    position:fixed;top:16px;left:calc(var(--sidebar) + 16px);z-index:100;
+    display:flex;align-items:center;gap:7px;
+    background:var(--card);border:1px solid var(--line);border-radius:9px;
+    padding:8px 13px;cursor:pointer;font-family:var(--sans);font-size:12.5px;
+    color:var(--ink-soft);box-shadow:0 2px 10px rgba(70,58,40,.07);
+    transition:left .28s ease,color .15s,border-color .15s;
+  }
+  #sbToggle:hover{color:var(--accent);border-color:#C9D6D9;}
+  #sbToggle .bars{display:inline-flex;flex-direction:column;gap:2.5px;}
+  #sbToggle .bars i{display:block;width:13px;height:1.6px;background:currentColor;border-radius:1px;}
+
+  /* ============ 正文 ============ */
+  #main{
+    margin-left:var(--sidebar);padding:70px 54px 120px;
+    transition:margin-left .28s ease;max-width:1180px;
+  }
+  .wrap{max-width:780px;margin:0 auto;}
+
+  /* 页头 */
+  .page-head{margin-bottom:44px;padding-bottom:30px;border-bottom:2px solid var(--ink);}
+  .page-kicker{
+    font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--ink-mute);font-weight:600;margin-bottom:14px;
+  }
+  .page-head h1{
+    margin:0 0 12px;font-size:2.05rem;line-height:1.32;font-weight:700;
+    letter-spacing:-.01em;
+  }
+  .page-head h1 em{font-family:var(--serif);font-style:italic;font-weight:600;color:var(--accent);}
+  .page-sub{color:var(--ink-soft);font-size:15px;margin:0 0 20px;line-height:1.8;}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-size:12.5px;padding:4px 11px;border-radius:20px;
+    background:var(--card);border:1px solid var(--line);color:var(--ink-soft);
+  }
+  .chip b{color:var(--accent);font-weight:700;}
+
+  /* 章节 */
+  section{margin-bottom:56px;scroll-margin-top:28px;}
+  h2{
+    font-size:1.42rem;font-weight:700;margin:0 0 22px;padding-bottom:11px;
+    border-bottom:1px solid var(--line);line-height:1.45;position:relative;
+  }
+  h2::before{
+    content:"";position:absolute;left:0;bottom:-1px;width:52px;height:2px;
+    background:var(--accent);
+  }
+  h3{
+    font-size:1.06rem;font-weight:700;margin:34px 0 14px;color:var(--ink);
+    line-height:1.6;
+  }
+  h4{
+    font-size:1.02rem;font-weight:700;margin:26px 0 10px;color:var(--ink);
+    font-family:var(--serif);letter-spacing:.01em;
+  }
+  h4 .num{
+    font-family:var(--sans);font-size:.78rem;color:var(--accent);
+    background:var(--accent-soft);border-radius:5px;padding:2px 7px;
+    margin-right:9px;vertical-align:2px;font-weight:700;
+  }
+  p{margin:0 0 15px;}
+  strong{font-weight:700;color:#1E1C18;}
+  em{font-style:italic;}
+
+  /* 引言块 */
+  .lede{
+    background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:0 10px 10px 0;padding:18px 22px;margin:0 0 34px;
+    font-size:15.5px;color:var(--ink-soft);line-height:1.85;
+  }
+  .lede b{color:var(--ink);}
+
+  /* 批注体系 */
+  .anno{
+    margin:11px 0;padding:11px 16px 11px 15px;border-radius:0 8px 8px 0;
+    border-left:3px solid var(--c);background:var(--bg);
+    font-size:.94rem;line-height:1.82;color:#3B3730;
+  }
+  .anno .tag{
+    display:inline-block;font-weight:700;color:var(--c);
+    font-size:.82rem;letter-spacing:.04em;margin-right:6px;
+  }
+  .anno.def{--c:var(--c-def);--bg:var(--bg-def);}
+  .anno.mem{--c:var(--c-mem);--bg:var(--bg-mem);}
+  .anno.eg {--c:var(--c-eg); --bg:var(--bg-eg);}
+  .anno.ext{--c:var(--c-ext);--bg:var(--bg-ext);}
+  .anno.fix{--c:var(--c-fix);--bg:var(--bg-fix);}
+  .anno.eg em{font-family:var(--serif);font-size:1.01em;color:#1D3B33;}
+
+  /* 单词卡 */
+  .word{
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+    padding:18px 22px 20px;margin:16px 0;scroll-margin-top:24px;
+    box-shadow:0 1px 3px rgba(90,74,48,.045);
+    transition:box-shadow .2s,border-color .2s;
+  }
+  .word:hover{box-shadow:0 3px 14px rgba(90,74,48,.08);border-color:#D6CBB6;}
+  .word-hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:9px;margin-bottom:2px;}
+  .word-hd .idx{
+    font-family:var(--sans);font-size:.72rem;font-weight:700;color:#fff;
+    background:var(--accent);border-radius:5px;padding:1px 6px;
+    align-self:center;letter-spacing:.03em;
+  }
+  .word-hd .term{
+    font-family:var(--serif);font-size:1.28rem;font-weight:700;
+    color:var(--ink);letter-spacing:.005em;
+  }
+  .word-hd .pos{
+    font-family:var(--serif);font-style:italic;font-size:.92rem;
+    color:var(--ink-mute);
+  }
+  .word-hd .cn{font-size:.98rem;color:var(--ink-soft);}
+  .phon{
+    font-family:var(--serif);font-size:.9rem;color:var(--ink-mute);
+    margin:0 0 4px;letter-spacing:.02em;
+  }
+  .word .anno:last-child{margin-bottom:0;}
+
+  /* 表格 */
+  .tbl-wrap{overflow-x:auto;margin:20px 0 26px;border:1px solid var(--line);border-radius:10px;background:var(--card);}
+  table{width:100%;border-collapse:collapse;font-size:.9rem;line-height:1.7;}
+  thead th{
+    background:#F4EFE4;text-align:left;padding:11px 15px;font-weight:700;
+    color:var(--ink);font-size:.85rem;letter-spacing:.03em;
+    border-bottom:1px solid var(--line);white-space:nowrap;
+  }
+  tbody td{padding:10px 15px;border-bottom:1px solid var(--line-soft);color:var(--ink-soft);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:0;}
+  tbody tr:hover{background:#FCFAF5;}
+  tbody td:first-child{color:var(--ink-mute);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .t-term{font-family:var(--serif);font-weight:600;color:var(--ink);}
+  .t-fix{color:var(--c-fix);font-weight:600;}
+
+  /* 结构流程 */
+  .flow{
+    display:flex;align-items:center;justify-content:center;gap:0;
+    flex-wrap:wrap;margin:26px 0;padding:24px 16px;
+    background:var(--card);border:1px solid var(--line);border-radius:11px;
+  }
+  .flow-node{
+    text-align:center;padding:13px 20px;border-radius:9px;
+    background:var(--accent-soft);border:1px solid #CFDFE3;min-width:132px;
+  }
+  .flow-node .en{
+    font-family:var(--serif);font-size:1rem;font-weight:700;color:var(--accent);
+    display:block;line-height:1.4;
+  }
+  .flow-node .cn{font-size:11.5px;color:var(--ink-mute);display:block;margin-top:3px;}
+  .flow-arrow{color:#A8BFC4;font-size:15px;padding:0 14px;}
+
+  /* 引用/原则 */
+  blockquote{
+    margin:22px 0;padding:16px 22px;background:var(--card);
+    border-left:3px solid var(--accent);border-radius:0 8px 8px 0;
+    font-family:var(--serif);font-size:1.04rem;color:#2A3D42;line-height:1.85;
+  }
+  blockquote .trans{
+    display:block;font-family:var(--sans);font-size:.86rem;
+    color:var(--ink-mute);margin-top:7px;font-style:normal;
+  }
+
+  /* 小节引导语 */
+  .para-intro{
+    font-size:.88rem;color:var(--ink-mute);letter-spacing:.06em;
+    margin:30px 0 4px;padding-bottom:8px;border-bottom:1px dashed var(--line);
+    font-weight:600;text-transform:uppercase;
+  }
+
+  /* 复习建议 */
+  ol.steps{padding-left:0;list-style:none;counter-reset:s;margin:20px 0;}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:0 0 0 40px;margin-bottom:16px;
+    color:var(--ink-soft);font-size:.96rem;
+  }
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:3px;
+    width:24px;height:24px;border-radius:50%;background:var(--accent);
+    color:#fff;font-size:12px;font-weight:700;display:flex;
+    align-items:center;justify-content:center;font-family:var(--sans);
+  }
+  ol.steps li b{color:var(--ink);}
+
+  /* 相关笔记 */
+  .related{
+    margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+    font-size:.88rem;color:var(--ink-mute);
+  }
+  .related a{color:var(--accent);text-decoration:none;border-bottom:1px solid #BFD2D7;}
+  .related a:hover{border-bottom-color:var(--accent);}
+
+  /* 移动端遮罩 */
+  #backdrop{display:none;}
+
+  /* 返回顶部 */  #toTop{
+    position:fixed;right:26px;bottom:26px;width:40px;height:40px;
+    border-radius:50%;border:1px solid var(--line);background:var(--card);
+    cursor:pointer;color:var(--ink-soft);font-size:15px;z-index:95;
+    box-shadow:0 2px 10px rgba(70,58,40,.09);
+    opacity:0;pointer-events:none;transition:.22s;
+  }
+  #toTop.show{opacity:1;pointer-events:auto;}
+  #toTop:hover{color:var(--accent);border-color:#C9D6D9;}
+
+  /* 响应式 */
+  @media (max-width:1080px){
+    #main{padding:70px 32px 100px;}
+  }
+  @media (max-width:860px){
+    #sidebar{
+      width:288px;transform:translateX(-100%);opacity:1;
+      box-shadow:0 0 40px rgba(60,50,35,.16);
+    }
+    body.sb-open #sidebar{transform:translateX(0);}
+    #backdrop{
+      display:block;position:fixed;inset:0;background:rgba(50,42,30,.3);
+      z-index:85;opacity:0;pointer-events:none;transition:opacity .25s ease;
+    }
+    body.sb-open #backdrop{opacity:1;pointer-events:auto;}
+    #main{margin-left:0;padding:64px 20px 90px;}
+    #sbToggle{left:14px;}
+    body.sb-open #sbToggle{left:300px;}
+    .page-head h1{font-size:1.6rem;}
+    .word{padding:15px 16px 17px;}
+    .flow{gap:6px;}
+    .flow-arrow{transform:rotate(90deg);padding:4px 0;}
+  }
+  @media print{
+    #sidebar,#sbToggle,#toTop,#progress{display:none!important;}
+    #main{margin:0;padding:0;max-width:none;}
+    body{background:#fff;font-size:11pt;}
+    .word,.anno,.lede{box-shadow:none;break-inside:avoid;}
+    section{break-inside:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<button id="sbToggle" aria-label="切换目录">
+  <span class="bars"><i></i><i></i><i></i></span><span>目录</span>
+</button>
+
+<aside id="sidebar">
+  <div class="sb-head">
+    <div class="sb-eyebrow">English Class Notes</div>
+    <div class="sb-title">英语课堂笔记<br><em>Unit 1 Language Learning</em></div>
+  </div>
+
+  <div class="sb-search">
+    <input id="search" type="search" placeholder="搜索词条 / 章节…" autocomplete="off">
+  </div>
+
+  <nav id="toc">
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>导读与图例</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-intro">本单元主线</a></li>
+          <li><a href="#sec-intro">批注图例</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>一、SA 与 SB 的分工</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-1">课堂精读与自主阅读</a></li>
+          <li><a href="#sec-1">核心概念 self-accomplishment</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>二、语法到底重不重要</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-2">Yes / No 两个分支</a></li>
+          <li><a href="#sec-2">落地原则</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>三、文体与结构</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-3">narrative 记叙文</a></li>
+          <li><a href="#sec-3">三段划分</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>四、课前预习任务</button>
+      <div class="toc-body">
+        <ul>
+          <li><a href="#sec-4">课前指导 + idea</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>五、语言点精讲</button>
+      <div class="toc-body">
+        <ul><li><a href="#sec-5">本章导语</a></li></ul>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>Para 1 · 5 个语言点</button>
+          <ul>
+            <li><a href="#w1">① tedious</a></li>
+            <li><a href="#w2">② oddity</a></li>
+            <li><a href="#w3">③ be obliged to do sth.</a></li>
+            <li><a href="#w4">④ be absorbed in</a></li>
+            <li><a href="#w5">⑤ allergic</a></li>
+          </ul>
+        </div>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>Para 2 · 5 个语言点</button>
+          <ul>
+            <li><a href="#w6">① be serious about</a></li>
+            <li><a href="#w7">② run into sb.</a></li>
+            <li><a href="#w8">③ fresh from</a></li>
+            <li><a href="#w9">④ excursion</a></li>
+            <li><a href="#w10">⑤ full of earnest anticipation</a></li>
+          </ul>
+        </div>
+        <div class="toc-sub" data-sub>
+          <button class="toc-sub-btn"><span class="caret">▾</span>Para 3 · 4 个语言点</button>
+          <ul>
+            <li><a href="#w11">① exclaim</a></li>
+            <li><a href="#w12">② condensed</a></li>
+            <li><a href="#w13">③ distress</a></li>
+            <li><a href="#w14">④ exceed</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>六、词汇速查表</button>
+      <div class="toc-body">
+        <ul><li><a href="#sec-6">14 词全表</a></li></ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>七、订正汇总</button>
+      <div class="toc-body">
+        <ul><li><a href="#sec-7">6 处订正</a></li></ul>
+      </div>
+    </div>
+
+    <div class="toc-chap" data-chap>
+      <button class="toc-btn"><span class="caret">▾</span>八、复习建议</button>
+      <div class="toc-body">
+        <ul><li><a href="#sec-8">四条执行建议</a></li></ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="sb-foot">
+    <span>14 词条 · 3 段落</span>
+    <div class="fs-group">
+      <button id="fsDown" title="缩小字号">A−</button>
+      <button id="fsUp" title="放大字号">A+</button>
+    </div>
+  </div>
+</aside>
+
+<main id="main">
+<div class="wrap">
+
+  <header class="page-head">
+    <div class="page-kicker">大学英语 · 课堂笔记</div>
+    <h1>Unit 1 <em>Language Learning</em></h1>
+    <p class="page-sub">课文精读与语言点整理 · 从课堂导入到逐段词汇，按逻辑主线归位</p>
+    <div class="chips">
+      <span class="chip">来源 <b>2 页手写笔记</b></span>
+      <span class="chip">语言点 <b>14 个</b></span>
+      <span class="chip">段落 <b>3 段</b></span>
+      <span class="chip">订正 <b>6 处</b></span>
+    </div>
+  </header>
+
+  <div class="lede" id="sec-intro">
+    <b>本单元主线：</b>SA 精读 → 建立「用英语思考」的习惯 → 抓住记叙文三段结构 → 逐段攻克语言点。<br>
+    笔记按这条线索重排，课堂上的零散记录全部归入对应环节，不再按原始页面顺序罗列。
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>批注类型</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td><span style="color:var(--c-def);font-weight:700">释义辨析</span></td><td>词义内核、易混词区别、固定搭配</td></tr>
+        <tr><td><span style="color:var(--c-mem);font-weight:700">记忆联想</span></td><td>助记线索、课堂原话提炼</td></tr>
+        <tr><td><span style="color:var(--c-eg);font-weight:700">例句</span></td><td>例句原文与中文译文</td></tr>
+        <tr><td><span style="color:var(--c-ext);font-weight:700">拓展延伸</span></td><td>词族、同义替换、用法补充</td></tr>
+        <tr><td><span style="color:var(--c-fix);font-weight:700">订正备注</span></td><td>原笔记笔误修正与提示</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <section id="sec-1">
+    <h2>一、SA 与 SB：课堂精读与自主阅读</h2>
+
+    <p>开课先分清教材的两条线。同一个单元里，SA 是课上精讲的部分，SB 是留给自己读的部分，两者要求不同。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>缩写</th><th>全称</th><th>含义</th><th>课上说法</th></tr></thead>
+        <tbody>
+          <tr><td><b>SA</b></td><td>Section A</td><td>课堂精读篇目</td><td>reading, learning on class —— 课上跟着老师读、讲</td></tr>
+          <tr><td><b>SB</b></td><td>Section B</td><td>自主阅读篇目</td><td>learning by yourself —— 课后自己读、自己啃</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="anno ext">
+      <span class="tag">拓展延伸</span>大学英语教材（如《新视野大学英语》读写教程）每单元固定分为 Section A 与 Section B，A 篇精讲、B 篇泛读，这是通用编排，不是本教材特有。
+    </div>
+
+    <h3>核心概念：<em style="font-family:var(--serif);font-style:normal">self-accomplishment</em>　n. 自我成就感</h3>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span>self-（自我）+ accomplishment（成就、完成）→ 靠自己把一件事做完之后获得的那种满足感。
+    </div>
+    <div class="anno ext">
+      <span class="tag">拓展延伸</span>accomplish v. 完成、实现；accomplished a. 有造诣的、娴熟的。与 achievement 的区别：achievement 侧重「成绩、成果」这个客观结果，accomplishment 侧重「完成的过程与由此而来的满足」。
+    </div>
+    <div class="anno eg">
+      <span class="tag">例句</span><em>Finishing the project alone gave him a real sense of self-accomplishment.</em>（独自完成这个项目让他获得了实实在在的自我成就感。）
+    </div>
+  </section>
+
+  <section id="sec-2">
+    <h2>二、语法到底重不重要</h2>
+
+    <p>老师给的是一道<b>条件判断题</b>，不是「重要」或「不重要」的单选。答案取决于你要说什么话。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>判断</th><th>结论</th><th>理由</th></tr></thead>
+        <tbody>
+          <tr><td><b>Yes</b></td><td><span class="t-term">convey formal sentences</span></td><td>要写、要说「正式句子」（论文、公文、考试作文）时，语法是刚需</td></tr>
+          <tr><td><b>No</b></td><td><span class="t-term">throw it away!</span></td><td>日常口语表达，别被语法捆住手脚，先说出来</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>落地原则</h3>
+    <blockquote>
+      When you are going to explain / express ideas, think in English.
+      <span class="trans">当你准备解释或表达观点时，直接用英语思维。</span>
+    </blockquote>
+
+    <div class="anno mem">
+      <span class="tag">记忆联想</span>这条是本单元的「学习法总纲」——语法是工具，不是目的。用得上就拿，用不上就放。老师用 <em>throw it away</em> 这种口语化的说法，就是在强调「别让语法成为开口的门槛」。
+    </div>
+    <div class="anno def">
+      <span class="tag">释义辨析</span>convey v. 传达、传递（信息、想法、情感）。<em>convey formal sentences</em> 意为「表达正式的句子」，convey 比 say / express 更书面。
+    </div>
+  </section>
+
+  <section id="sec-3">
+    <h2>三、文体与结构：narrative 记叙文</h2>
+
+    <p><span class="t-term" style="font-size:1.05rem">narrative</span>　<span class="phon" style="display:inline">/ˈnærətɪv/</span>　n. 记叙文；叙述　a. 叙述的</p>
+
+    <div class="anno def">
+      <span class="tag">释义辨析</span>narrate v. 讲述 → narrative n. 记叙文。与之并列的文体还有 exposition（说明文）、argumentation（议论文）、description（描写文）。
+    </div>
+
+    <h3>文章三段划分</h3>
+
+    <div class="flow">
+      <div class="flow-node"><span class="en">Introduction</span><span class="cn">开头：交代背景、引出事件</span></div>
+      <span class="flow-arrow">➜</span>
+      <div class="flow-node"><span class="en">Body</span><span class="cn">主体：展开情节、推进冲突</span></div>
+      <span class="flow-arrow">➜</span>
+      <div class="flow-node"><span class="en">Conclusion</span><span class="cn">结尾：收束全文、点明主题</span></div>
+    </div>
+
+    <div class="anno ext">
+      <span class="tag">拓展延伸</span>这是阅读题的通用骨架。做题时先定位三段边界，再抓每段的主题句（通常在段首或段尾），比逐句翻译快得多。
+    </div>
+  </section>
+
+  <section id="sec-4">
+    <h2>四、课前预习任务</h2>
+
+    <p><b>写课前指导 + idea（预习工作）</b></p>
+
+    <div class="anno mem">
+      <span class="tag">记忆联想</span>老师布置的预习产出是两个东西——「课前指导」是对文章的整体预判（讲什么、怎么讲），「idea」是自己的观点。课上带着问题听，效率完全不同。
+    </div>
+  </section>
+
+  <section id="sec-5">
+    <h2>五、语言点精讲</h2>
+
+    <p>14 个语言点按课文段落归位。每个词条补齐了音标、固定搭配、近义替换和例句，原笔记里的课堂原话保留在「记忆联想」中。</p>
+
+    <div class="para-intro">Para 1 · 5 个语言点</div>
+
+    <article class="word" id="w1">
+      <div class="word-hd"><span class="idx">01</span><span class="term">tedious</span><span class="pos">a.</span><span class="cn">冗长乏味的；单调沉闷的</span></div>
+      <div class="phon">/ˈtiːdiəs/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>≈ boring。区别在于 boring 是通用口语词，tedious 更书面，强调「因过长、重复、单调而令人厌倦」。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>常用搭配 <em>a tedious lecture / task / journey</em>；副词形式 tediously；名词 tedium（单调乏味）。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The lecture was so tedious that half the class fell asleep.</em>（那场讲座冗长乏味，半个班都睡着了。）</div>
+    </article>
+
+    <article class="word" id="w2">
+      <div class="word-hd"><span class="idx">02</span><span class="term">oddity</span><span class="pos">n.</span><span class="cn">怪人；怪物；古怪的事物</span></div>
+      <div class="phon">/ˈɒdəti/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>odd a. 奇怪的 → oddity n. 古怪的人或事。同义替换：strange（a. 奇怪的）、eccentric（a. 古怪的，多指人的性情）。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>odd 还有「奇数」义（odd number），与 even（偶数）相对；odd 作「零散的」讲时常用于 odd jobs（零工）。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>He was a local oddity, known to everyone in the village.</em>（他是当地的一个怪人，村里人人都认识他。）</div>
+    </article>
+
+    <article class="word" id="w3">
+      <div class="word-hd"><span class="idx">03</span><span class="term">be obliged to do sth.</span><span class="cn">有义务 / 责任做某事</span></div>
+      <div class="phon">/əˈblaɪdʒd/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>等于 <em>you must do it</em>，但带「责任、义务」的意味，比 must 更正式。词族：obligate v. 使有义务；obligated a. 有义务的；obligation n. 义务、责任；responsibility n. 责任。</div>
+      <div class="anno def"><span class="tag">另一义</span><b>be obliged to sb. for sth.</b>　感激、感谢。这是课堂上用蓝笔补充的第二个义项，与「有义务」共用同一动词，靠介词区分。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>原笔记写作「be obliged to sb./sth. 感激」。标准搭配是 <b>be obliged to sb. for sth.</b>——to 后面接人，for 引出感谢的原因。少了 for，句子不完整。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>近义词 grateful a. 感激的；thankful a. 感谢的。grateful 强调「因受益而心存感激」，thankful 更口语，常含「庆幸」意味。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>All staff are obliged to attend the safety training.</em>（全体员工都有义务参加安全培训。）</div>
+      <div class="anno eg"><span class="tag">例句</span><em>I'm much obliged to you for your help.</em>（非常感谢你的帮助。）</div>
+    </article>
+
+    <article class="word" id="w4">
+      <div class="word-hd"><span class="idx">04</span><span class="term">be absorbed in</span><span class="cn">全神贯注于；沉浸在</span></div>
+      <div class="phon">/əbˈsɔːbd/</div>
+      <div class="anno def"><span class="tag">释义辨析</span><em>so interested in sth. that you can't notice anything else</em>——注意力被完全吸走，外界发生什么都感知不到。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>同义表达 be buried in / be engrossed in / lose oneself in；absorb v. 吸收、使专注；absorbing a. 引人入胜的。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>She was so absorbed in her book that she missed her stop.</em>（她看书太入神，坐过了站。）</div>
+    </article>
+
+    <article class="word" id="w5">
+      <div class="word-hd"><span class="idx">05</span><span class="term">allergic</span><span class="pos">a.</span><span class="cn">过敏的；反感的，不喜欢的</span></div>
+      <div class="phon">/əˈlɜːdʒɪk/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>本义「对……过敏」，引申为「对……极度反感、讨厌」。两种意思共用同一个搭配：<b>be allergic to sth.</b>，介词固定用 to。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>allergy n. 过敏；have an allergy (to sth.) 对……过敏；allergen n. 过敏原。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>原笔记写作「allerge n. 过敏」。正确拼写是 <b>allergen</b>（过敏原），而表示「过敏」这个名词的是 <b>allergy</b>——两个词别混。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>I'm allergic to seafood.</em>（我对海鲜过敏。）</div>
+      <div class="anno eg"><span class="tag">例句</span><em>He is allergic to flattery.</em>（他对奉承话极其反感。）</div>
+    </article>
+
+    <div class="para-intro">Para 2 · 5 个语言点</div>
+
+    <article class="word" id="w6">
+      <div class="word-hd"><span class="idx">06</span><span class="term">be serious about</span><span class="cn">对……认真的；认真对待</span></div>
+      <div class="phon">/ˈsɪəriəs/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>表示态度上的郑重，不是「表情严肃」。后接名词或动名词：<em>be serious about doing sth.</em>。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>同义 take sth. seriously；反义 be kidding about sth.。注意 serious 修饰人时指「严肃、不苟言笑」，修饰事时才指「认真的」。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>She is serious about learning Japanese.</em>（她学日语是认真的。）</div>
+    </article>
+
+    <article class="word" id="w7">
+      <div class="word-hd"><span class="idx">07</span><span class="term">run into sb.</span><span class="cn">偶遇某人；撞上</span></div>
+      <div class="phon">/rʌn ˈɪntə/</div>
+      <div class="anno def"><span class="tag">释义辨析</span><em>meet by chance / accident</em>——强调「不期而遇」，不是约好的见面。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>同类表达 run across sb. / come across sb. / encounter sb.（encounter 最正式）。run into 还可接物或抽象名词：run into difficulties（遇到困难）、run into debt（负债）。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>I ran into an old classmate at the airport.</em>（我在机场偶遇了一位老同学。）</div>
+    </article>
+
+    <article class="word" id="w8">
+      <div class="word-hd"><span class="idx">08</span><span class="term">fresh from</span><span class="cn">刚从……来的；刚有……经历的</span></div>
+      <div class="phon">/freʃ/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>直接来自某处或某个阶段，身上还带着那段经历的新鲜状态。课堂例句：<em>be fresh from high school</em>（刚从高中毕业的）。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>fresh 的常见搭配——freshman n. 大一新生；fresh water 淡水；a fresh start 全新的开始。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The recruits are fresh from training camp.</em>（这些新兵刚从训练营出来。）</div>
+    </article>
+
+    <article class="word" id="w9">
+      <div class="word-hd"><span class="idx">09</span><span class="term">excursion</span><span class="pos">n.</span><span class="cn">短途出行；远足</span></div>
+      <div class="phon">/ɪkˈskɜːʃn/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>= <em>short journey</em>。老师特别限定：踏青之类、<b>几天以内</b>的旅行，不含长途旅行。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>辨析——excursion 短途（几天内）；journey 泛指旅程（可长可短，偏书面）；trip 口语泛指；voyage 海上或太空航行；tour 周游、巡回。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>We took a one-day excursion to the ancient town.</em>（我们去古镇做了一日游。）</div>
+    </article>
+
+    <article class="word" id="w10">
+      <div class="word-hd"><span class="idx">10</span><span class="term">full of earnest anticipation</span><span class="cn">满怀真诚的期待</span></div>
+      <div class="phon">/ˈɜːnɪst ænˌtɪsɪˈpeɪʃn/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>earnest a. 真诚的、认真的（强调郑重其事，不是「真心」）；anticipation n. 期待、预期。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>常用搭配 <em>in anticipation of sth.</em>（期待 / 预料某事）；eager anticipation（热切的期待）；earnestly ad. 认真地。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>原笔记译作「满怀真心」。规范译法为「<b>满怀真诚的期待</b>」——earnest 的核心是「郑重、认真」，译成「真心」会丢掉这层意味；且每个词都要译出，不能漏掉 anticipation。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The children waited, full of earnest anticipation, for the show to begin.</em>（孩子们满怀期待地等着演出开始。）</div>
+    </article>
+
+    <div class="para-intro">Para 3 · 4 个语言点</div>
+
+    <article class="word" id="w11">
+      <div class="word-hd"><span class="idx">11</span><span class="term">exclaim</span><span class="pos">v.</span><span class="cn">惊叫；呼喊；惊呼</span></div>
+      <div class="phon">/ɪkˈskleɪm/</div>
+      <div class="anno def"><span class="tag">释义辨析</span><em>say sth. suddenly / loudly because of surprise</em>——因惊讶等强烈情绪突然大声说出，情绪色彩是关键词。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>词根 ex-（向外）+ claim（喊）→ 喊出来。同族词：claim v. 声称；proclaim v. 宣告；acclaim v. 称赞；exclamation n. 感叹词、惊叹。exclaim 后接引语时常用直接引语，动词可前置。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>课堂上补充的口语表达 <b>It was like...</b>——用来打比方、描述当时的感受，是英语口语里的高频句式，写作中少用。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>"What a beautiful view!" she exclaimed.</em>（「多美的景色啊！」她惊叹道。）</div>
+    </article>
+
+    <article class="word" id="w12">
+      <div class="word-hd"><span class="idx">12</span><span class="term">condensed</span><span class="pos">a.</span><span class="cn">压缩的；浓缩的</span></div>
+      <div class="phon">/kənˈdenst/</div>
+      <div class="anno def"><span class="tag">释义辨析</span><em>be made short, just keep the important parts</em>——经过删减、只保留要点的。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>condense v. 压缩、浓缩（液体）；condensed milk 炼乳；condensed version 精简版。反义 expanded / unabridged（未删节的）。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>原笔记写 <em>just spare important parts</em>。spare 意为「腾出、抽出、饶恕」，此处语义不通，应为 <b>keep only the important parts</b>（只保留重点部分）。</div>
+      <div class="anno mem"><span class="tag">记忆联想</span>蓝笔批注的 <b>non-statement</b> 指「非陈述性话语、不作明确表态」，与「不成文的」不是一回事。「不成文的」英文是 unwritten / unspoken（如 unwritten rule 不成文的规定）。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>This is a condensed version of the report.</em>（这是报告的精简版。）</div>
+    </article>
+
+    <article class="word" id="w13">
+      <div class="word-hd"><span class="idx">13</span><span class="term">distress</span><span class="pos">n.</span><span class="cn">忧虑；悲伤；痛苦</span></div>
+      <div class="phon">/dɪˈstres/</div>
+      <div class="anno def"><span class="tag">释义辨析</span>→ <em>very unhappy</em>。指因困境、坏消息、事故引起的强烈痛苦，程度比 sad 重，多带「受折磨」的意味。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>in distress 处于困境 / 痛苦中；cause sb. distress 使某人痛苦；distressed a. 痛苦的、（物品）受损的；distressing a. 令人痛苦的。distress 还可作动词：be distressed by sth.。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The news caused her great distress.</em>（这个消息让她十分痛苦。）</div>
+    </article>
+
+    <article class="word" id="w14">
+      <div class="word-hd"><span class="idx">14</span><span class="term">exceed</span><span class="pos">v.</span><span class="cn">超过；超出</span></div>
+      <div class="phon">/ɪkˈsiːd/</div>
+      <div class="anno def"><span class="tag">释义辨析</span><em>go beyond a limit or amount</em>，正式用语（[formal]），多用于数量、限度、预期。</div>
+      <div class="anno ext"><span class="tag">拓展延伸</span>exceed the limit 超限；exceed expectations 超出预期；exceed the speed limit 超速。名词 excess（过量），形容词 excessive（过度的）。</div>
+      <div class="anno fix"><span class="tag">订正备注</span>原笔记写 <em>be exceed by</em>。被动语态必须用过去分词，应为 <b>be exceeded by</b>（被……超过 / 超出量达……）。</div>
+      <div class="anno eg"><span class="tag">例句</span><em>Sales exceeded our expectations last quarter.</em>（上季度销售额超出了我们的预期。）</div>
+      <div class="anno eg"><span class="tag">例句</span><em>The limit was exceeded by nearly 20%.</em>（超出限额近 20%。）</div>
+    </article>
+  </section>
+
+  <section id="sec-6">
+    <h2>六、词汇速查表</h2>
+    <p>按段落顺序排列，考前扫一遍用。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>词条</th><th>音标</th><th>词性与释义</th><th>段落</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td class="t-term">tedious</td><td>/ˈtiːdiəs/</td><td>a. 冗长乏味的</td><td>Para 1</td></tr>
+          <tr><td>2</td><td class="t-term">oddity</td><td>/ˈɒdəti/</td><td>n. 怪人；怪物</td><td>Para 1</td></tr>
+          <tr><td>3</td><td class="t-term">be obliged to do sth.</td><td>/əˈblaɪdʒd/</td><td>有义务 / 责任做某事</td><td>Para 1</td></tr>
+          <tr><td>4</td><td class="t-term">be absorbed in</td><td>/əbˈsɔːbd/</td><td>全神贯注于；沉浸在</td><td>Para 1</td></tr>
+          <tr><td>5</td><td class="t-term">allergic</td><td>/əˈlɜːdʒɪk/</td><td>a. 过敏的；反感的</td><td>Para 1</td></tr>
+          <tr><td>6</td><td class="t-term">be serious about</td><td>/ˈsɪəriəs/</td><td>对……认真的</td><td>Para 2</td></tr>
+          <tr><td>7</td><td class="t-term">run into sb.</td><td>/rʌn ˈɪntə/</td><td>偶遇某人</td><td>Para 2</td></tr>
+          <tr><td>8</td><td class="t-term">fresh from</td><td>/freʃ/</td><td>刚从……来的</td><td>Para 2</td></tr>
+          <tr><td>9</td><td class="t-term">excursion</td><td>/ɪkˈskɜːʃn/</td><td>n. 短途出行；远足</td><td>Para 2</td></tr>
+          <tr><td>10</td><td class="t-term">full of earnest anticipation</td><td>/ˈɜːnɪst ænˌtɪsɪˈpeɪʃn/</td><td>满怀真诚的期待</td><td>Para 2</td></tr>
+          <tr><td>11</td><td class="t-term">exclaim</td><td>/ɪkˈskleɪm/</td><td>v. 惊叫；惊呼</td><td>Para 3</td></tr>
+          <tr><td>12</td><td class="t-term">condensed</td><td>/kənˈdenst/</td><td>a. 压缩的；浓缩的</td><td>Para 3</td></tr>
+          <tr><td>13</td><td class="t-term">distress</td><td>/dɪˈstres/</td><td>n. 忧虑；悲伤</td><td>Para 3</td></tr>
+          <tr><td>14</td><td class="t-term">exceed</td><td>/ɪkˈsiːd/</td><td>v. 超过；超出</td><td>Para 3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec-7">
+    <h2>七、订正与补充汇总</h2>
+    <p>原笔记共 6 处需要修正。集中列在这里，复习时重点看这一张表。</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>原笔记</th><th>订正</th><th>说明</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>allerge n. 过敏</td><td class="t-fix">allergen n. 过敏原 / allergy n. 过敏</td><td>拼写与词义双重订正</td></tr>
+          <tr><td>2</td><td>be obliged to sb./sth. 感激</td><td class="t-fix">be obliged to sb. <b>for</b> sth.</td><td>缺 for，语义不完整</td></tr>
+          <tr><td>3</td><td>be exceed by</td><td class="t-fix">be exceed<b>ed</b> by</td><td>被动语态须用过去分词</td></tr>
+          <tr><td>4</td><td>non-statement 不成文的</td><td class="t-fix">non-statement 非陈述性话语；「不成文的」= unwritten / unspoken</td><td>释义错位</td></tr>
+          <tr><td>5</td><td>满怀真心</td><td class="t-fix">满怀真诚的期待</td><td>earnest 是「郑重」，不是「真心」；anticipation 不可漏译</td></tr>
+          <tr><td>6</td><td>just spare important parts</td><td class="t-fix">keep only the important parts</td><td>spare 语义不通</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="sec-8">
+    <h2>八、复习建议</h2>
+
+    <ol class="steps">
+      <li><b>先回课文，再背词表。</b>14 个词全部出自 SA 原文，脱离上下文背等于白背——把每个词在课文里的原句划出来，与上面的例句对照。</li>
+      <li><b>抓三个高频搭配。</b>be obliged to do / be allergic to / be absorbed in，这三个是介词最容易错的，先固定住。</li>
+      <li><b>同义替换成组记。</b>run into → come across / encounter；be absorbed in → be buried in / lose oneself in；tedious → boring。写作时才有替换余地。</li>
+      <li><b>exceed 的被动形式单独默写一遍。</b>这是本页唯一一个语法型错误，最容易在作文里复发。</li>
+    </ol>
+  </section>
+
+  <div class="related">
+    相关笔记：英语词汇笔记整理（第 1 辑 · 48 词）｜英语词汇笔记整理_第2辑（第 2 辑 · 20 词）｜四六级英语学习方法
+  </div>
+
+</div>
+</main>
+
+<button id="toTop" title="返回顶部">↑</button>
+<div id="backdrop"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 1. 目录折叠 ---------- */
+  document.querySelectorAll('.toc-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.parentElement.classList.toggle('closed');
+    });
+  });
+  document.querySelectorAll('.toc-sub-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      btn.parentElement.classList.toggle('closed');
+    });
+  });
+
+  /* ---------- 2. 侧栏收起 / 展开 ---------- */
+  var body = document.body,
+      toggle = document.getElementById('sbToggle'),
+      isMobile = function(){ return window.innerWidth <= 860; };
+
+  toggle.addEventListener('click', function(){
+    if (isMobile()) {
+      body.classList.toggle('sb-open');
+      toggle.querySelector('span:last-child').textContent =
+        body.classList.contains('sb-open') ? '收起' : '目录';
+    } else {
+      body.classList.toggle('sb-hidden');
+      toggle.querySelector('span:last-child').textContent =
+        body.classList.contains('sb-hidden') ? '目录' : '收起';
+    }
+  });
+
+  /* ---------- 3. 搜索过滤 ---------- */
+  var search = document.getElementById('search');
+  search.addEventListener('input', function(){
+    var q = search.value.trim().toLowerCase();
+
+    document.querySelectorAll('#toc li').forEach(function(li){
+      if (!q) { li.classList.remove('hidden'); return; }
+      li.classList.toggle('hidden', li.textContent.toLowerCase().indexOf(q) === -1);
+    });
+
+    document.querySelectorAll('.toc-sub').forEach(function(sub){
+      var visible = sub.querySelectorAll('li:not(.hidden)').length;
+      sub.style.display = (!q || visible) ? '' : 'none';
+      if (q && visible) sub.classList.remove('closed');
+    });
+
+    document.querySelectorAll('.toc-chap').forEach(function(chap){
+      var items = chap.querySelectorAll('li:not(.hidden)');
+      var direct = chap.querySelectorAll(':scope > .toc-body > ul > li:not(.hidden)');
+      var visible = items.length + direct.length;
+      chap.style.display = (!q || visible) ? '' : 'none';
+      if (q && visible) chap.classList.remove('closed');
+    });
+  });
+
+  /* ---------- 4. 滚动高亮 + 进度条 ---------- */
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc a')),
+      targets = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }),
+      progress = document.getElementById('progress'),
+      toTop = document.getElementById('toTop');
+
+  function onScroll(){
+    var y = window.scrollY + 120,
+        idx = targets.length ? 0 : -1;
+
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i] && targets[i].offsetTop <= y) idx = i;
+    }
+
+    links.forEach(function(a, i){ a.classList.toggle('active', i === idx); });
+
+    if (idx > -1) {
+      var active = links[idx];
+      var sub = active.closest('.toc-sub');
+      if (sub) sub.classList.remove('closed');
+      var chap = active.closest('.toc-chap');
+      if (chap) chap.classList.remove('closed');
+      // 滚动侧栏使激活项可见
+      var sb = document.getElementById('toc');
+      var r = active.getBoundingClientRect(),
+          sr = sb.getBoundingClientRect();
+      if (r.top < sr.top + 40 || r.bottom > sr.bottom - 40) {
+        active.scrollIntoView({block:'nearest'});
+      }
+    }
+
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    progress.style.width = (h > 0 ? (window.scrollY / h * 100) : 0) + '%';
+    toTop.classList.toggle('show', window.scrollY > 600);
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  /* ---------- 5. 字号调节 ---------- */
+  var fs = 17.5;
+  function applyFs(){
+    fs = Math.min(22, Math.max(15, fs));
+    document.documentElement.style.setProperty('--fs-base', fs + 'px');
+  }
+  document.getElementById('fsUp').addEventListener('click', function(){ fs += 1; applyFs(); });
+  document.getElementById('fsDown').addEventListener('click', function(){ fs -= 1; applyFs(); });
+
+  /* ---------- 6. 返回顶部 ---------- */
+  toTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ---------- 7. 点击目录项后移动端收起 ---------- */
+  links.forEach(function(a){
+    a.addEventListener('click', function(){
+      if (isMobile()) {
+        body.classList.remove('sb-open');
+        toggle.querySelector('span:last-child').textContent = '目录';
+      }
+    });
+  });
+
+  /* ---------- 8. 点击遮罩关闭抽屉 ---------- */
+  document.getElementById('backdrop').addEventListener('click', function(){
+    body.classList.remove('sb-open');
+    toggle.querySelector('span:last-child').textContent = '目录';
+  });
+})();
+</script>
+</body>
+</html>
